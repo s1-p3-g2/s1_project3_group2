@@ -1,4 +1,4 @@
-# Merge Captains: `<team name>`
+# Merge Captains: `Rate My Duck`
 
 [Back to the Project 03 guide](README.md#the-merge-captain-and-deputy)
 
