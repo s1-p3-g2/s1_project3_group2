@@ -8,10 +8,10 @@
 
 | Sprint | Captain | Deputy | Release tag |
 |---|---|---|---|
-| 1 | `<name> (@github)` | `<name> (@github)` | `v0.1.0` |
-| 2 | `<name> (@github)` | `<name> (@github)` | `v0.2.0` |
-| 3 | `<name> (@github)` | `<name> (@github)` | `v0.3.0` |
-| 4 | `<name> (@github)` | `<name> (@github)` | `v1.0.0` |
+| 1 | `Asriel(@alyosha-ctrl)` | `Victoria H (@vha4493` | `v0.1.0` |
+| 2 | `Victoria (@vha4493)` | `Paul (@paullert)` | `v0.2.0` |
+| 3 | `Paul (@paullert)` | `Billy (@billyp2002)` | `v0.3.0` |
+| 4 | `Billy (@billyp2002)` | `Asriel(@alyosha-ctrl)` | `v1.0.0` |
 
 ## Swaps
 
