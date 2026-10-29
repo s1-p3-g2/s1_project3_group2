@@ -1,4 +1,4 @@
-# Product Requirements Document (PRD): `<product name>`
+# Product Requirements Document (PRD): Quizzest
 
 [Back to the Project 03 guide](../../../Users/paulc/Downloads/README.md)
 
@@ -17,14 +17,15 @@ Who is this for? Name **one** primary user type and describe them in one or two 
 "Everyone" and "students" are not user types; "a first-year student looking for a study group for
 one specific course" is.
 
-- **Primary user:** `<who they are, what they are trying to do>`
-- **Secondary user (optional):** `<for example, an admin>`
+- **Primary user:** Someone who wants to be entertained but not in a way that makes them feel icky while still moving their hands
+- **Secondary user (optional):** Someone who wants to stump others with their niche knowledge and teach people about their expertise.
 
 ## 2. Problem
 
 Two sentences: what the user struggles with today, and why existing options fall short.
 
 `<problem statement>`
+Boredom is ever pervasive, and feels like having your veins be held down by an anvil, but most ways to alleviate feel terrible or if they don't require large amounts of time. Edutainment as it currently exists is mostly made for children, and most educational content made for adults is obviously long form due to the nature of learning, so bite sized edutainment for adults is uncommon.
 
 ## 3. Success measures
 
@@ -33,7 +34,7 @@ check it.
 
 | # | Measure | Target | How we check it |
 |---|---|---|---|
-| S1 | `<e.g., a new user creates their first study session>` | `<under 2 minutes>` | `<timed during the onboarding test>` |
+| S1 | Able to post and get a quiz | quiz has at least one question, and get receives the correct quiz | checked by seeing the children of the quiz, and asserting the prepared question with what the ged receives |
 | S2 | | | |
 | S3 | | | |
 
@@ -42,6 +43,10 @@ check it.
 **MVP** is the smallest set of stories that makes *this* product useful. It always includes the
 account baseline (sign in with GitHub and Google, update profile, delete account) **plus** the
 stories specific to your product.
+
+Login
+Post
+Play
 
 - **MVP stories:** `<PRD-1, PRD-2, ...>` (listed in section 5)
 - **Vertical slice:** `<the one MVP story you will polish end to end and test with Playwright>`
