@@ -60,9 +60,9 @@ test.
 
 | ID | Story | Acceptance criteria |
 |---|---|---|
-| PRD-1 | As a `<user>`, I want to `<action>` so that `<benefit>`. | **Given** `<state>`, **when** `<action>`, **then** `<observable result>`. |
-| PRD-2 | | |
-| PRD-3 | | |
+| PRD-1 | As a Quizzest player, I want to make Quizzes so that I can make quizzes based around niche topics for my friends. | **Given** The app functions, **when** users are able to make quizzes, **then** the custom quiz functionality is complete. |
+| PRD-2 | As a Quizzest player, I want to take quizzes based around my interests | **Given** The app functions, **when** users are able to take quizzes both made by other players and some built-in quizzes, **then** the quiz taking functionality is complete. ||
+| PRD-3 | As a Quizzest player, I want to be able to log in so that I can save the quizzes I've made and taken before | **Given** The app functions, **when** users can log into their account, **then** login functionality is complete|
 
 ---
 
@@ -70,4 +70,4 @@ test.
 
 | Date | PR | What changed and why |
 |---|---|---|
-| `<date>` | `#<n>` | Initial version |
+| 10/29/26 | PR1 | Initial version |
