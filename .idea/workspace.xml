@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="866bfccf-0442-4346-8490-271385e40380" name="Changes" comment="Fixed conflicts" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="vha4493 &lt;vha4493@gmail.com&gt;" />
+        <option value="Vha4493 &lt;vha@csumb.edu&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="teamCaptains" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;paullert&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/s1-p3-g2/s1_project3_group2.git&quot;,
+    &quot;accountId&quot;: &quot;96d9281d-9bed-4a50-838b-b79e5f13e51a&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="3LNzBiBZdLcFEXECqNkmfpWYF6G" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="866bfccf-0442-4346-8490-271385e40380" name="Changes" comment="" />
+      <created>1793309181959</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1793309181959</updated>
+      <workItem from="1793309183304" duration="1314000" />
+      <workItem from="1793310536359" duration="952000" />
+    </task>
+    <task id="LOCAL-00001" summary="Update captains.md&#10;&#10;captains added">
+      <option name="closed" value="true" />
+      <created>1793309524493</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1793309524493</updated>
+    </task>
+    <task id="LOCAL-00002" summary="added captian names.">
+      <option name="closed" value="true" />
+      <created>1793309535856</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1793309535856</updated>
+    </task>
+    <task id="LOCAL-00003" summary="added captian names.">
+      <option name="closed" value="true" />
+      <created>1793309702817</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1793309702817</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Update captains.md&#10;&#10;captains added">
+      <option name="closed" value="true" />
+      <created>1793309827695</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1793309827695</updated>
+    </task>
+    <task id="LOCAL-00005" summary="added captian names.">
+      <option name="closed" value="true" />
+      <created>1793309836331</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1793309836331</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Fixed dumb branch">
+      <option name="closed" value="true" />
+      <created>1793310155972</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1793310155972</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Checked branch protection checklist">
+      <option name="closed" value="true" />
+      <created>1793310408174</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1793310408176</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added Teamname to branch">
+      <option name="closed" value="true" />
+      <created>1793310478490</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1793310478490</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Fixed conflicts">
+      <option name="closed" value="true" />
+      <created>1793311446729</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1793311446729</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Fixed branch to better merge into main" />
+    <MESSAGE value="Fixed branch to better merge into main" />
+    <MESSAGE value="Update captains.md&#10;&#10;captains added" />
+    <MESSAGE value="added captian names." />
+    <MESSAGE value="Fixed dumb branch" />
+    <MESSAGE value="Checked branch protection checklist" />
+    <MESSAGE value="Added Team name to branch" />
+    <MESSAGE value="Added Team name to branch" />
+    <MESSAGE value="Fixed conflicts" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed conflicts" />
+  </component>
+</project>
