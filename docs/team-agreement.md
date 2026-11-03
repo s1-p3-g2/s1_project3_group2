@@ -1,4 +1,4 @@
-# Team Agreement: `<team name>`
+# Team Agreement: Group 2
 
 [Back to the Project 03 guide](README.md#the-team-agreement)
 
