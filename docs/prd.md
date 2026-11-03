@@ -1,4 +1,4 @@
-# Product Requirements Document (PRD): Quizzest
+# Product Requirements Document (PRD): Rate My Duck
 
 [Back to the Project 03 guide](../../../Users/paulc/Downloads/README.md)
 
@@ -17,15 +17,15 @@ Who is this for? Name **one** primary user type and describe them in one or two 
 "Everyone" and "students" are not user types; "a first-year student looking for a study group for
 one specific course" is.
 
-- **Primary user:** Someone who wants to be entertained but not in a way that makes them feel icky while still moving their hands
-- **Secondary user (optional):** Someone who wants to stump others with their niche knowledge and teach people about their expertise.
+- **Primary user:** Someone who wants to rate and submit rubber ducks to be rated
+- **Secondary user (optional):** Someone who wants to make sure that no inaproprate ducks can taint the pool of options
 
 ## 2. Problem
 
 Two sentences: what the user struggles with today, and why existing options fall short.
 
 `<problem statement>`
-Boredom is ever pervasive, and feels like having your veins be held down by an anvil, but most ways to alleviate feel terrible or if they don't require large amounts of time. Edutainment as it currently exists is mostly made for children, and most educational content made for adults is obviously long form due to the nature of learning, so bite sized edutainment for adults is uncommon.
+Rubber ducks are amazing beyond measure, letting us debug our code, bringing joy to our hearts, and any sane person has a large collection, but how can one empirically determine that their duck is the best rubber duck? Current mechanisms to rate ducks are either more broad ways to rate anything and thus not specialized, or are specialized in rating living ducks not the rubber ducks us programmers love.
 
 ## 3. Success measures
 
@@ -34,9 +34,9 @@ check it.
 
 | # | Measure | Target | How we check it |
 |---|---|---|---|
-| S1 | Able to post and get a quiz | quiz has at least one question, and get receives the correct quiz | checked by seeing the children of the quiz, and asserting the prepared question with what the ged receives |
-| S2 | | | |
-| S3 | | | |
+| S1 | Able to add a duck, and then see that duck | duck has a description, a live image, and a score of 0 | assert that the duck does not exist in the beginning, then assert that it does exist, has a score of zero, and that the link to the image is the same as the prepared live image |
+| S1 | Able to delete inappropriate ducks | inappropriate duck no longer exists | checked by asserting that the prepared duck no longer exists |
+| S1 | Able to rate a duck | after being rated negatively a duck with a rating of zero is -1, and after being rated positively it is 1 | checked by asserting the results from a baseline rateless duck |
 
 ## 4. Scope: MVP, vertical slice, and not building
 
@@ -45,12 +45,12 @@ account baseline (sign in with GitHub and Google, update profile, delete account
 stories specific to your product.
 
 Login
-Post
-Play
+Add Duck
+View Tier List
 
 - **MVP stories:** `<PRD-1, PRD-2, ...>` (listed in section 5)
 - **Vertical slice:** `<the one MVP story you will polish end to end and test with Playwright>`
-- **Not building (this term):** `<at least three things a reader might expect that you are deliberately leaving out>`
+- **Not building (this term):** Making other non duck tier lists, adding a way to upload a duck picture through downloads rather than using an already existing link, removing ducks due to bad ratings rather than individual admin decisions
 
 ## 5. User stories and acceptance criteria
 
@@ -60,9 +60,10 @@ test.
 
 | ID | Story | Acceptance criteria |
 |---|---|---|
-| PRD-1 | As a Quizzest player, I want to make Quizzes so that I can make quizzes based around niche topics for my friends. | **Given** The app functions, **when** users are able to make quizzes, **then** the custom quiz functionality is complete. |
-| PRD-2 | As a Quizzest player, I want to take quizzes based around my interests | **Given** The app functions, **when** users are able to take quizzes both made by other players and some built-in quizzes, **then** the quiz taking functionality is complete. ||
-| PRD-3 | As a Quizzest player, I want to be able to log in so that I can save the quizzes I've made and taken before | **Given** The app functions, **when** users can log into their account, **then** login functionality is complete|
+| PRD-1 | As a duck connoisseur, I want to submit my duck to be rated. | **Given** The app functions, **when** users are able to add a duck, **then** add duck routes and ui are done |
+| PRD-2 | As a duck connoisseur, I want to see all ducks | **Given** The app functions, **when** users are able to take quizzes both made by other players and some built-in quizzes, **then** the basic get path, and ui result is online |
+| PRD-2 | As a duck connoisseur, I want to rate a duck | **Given** That you are able to see the ducks you want to rate, **when** someone is able to rate a duck negatively and positively with others seeing the results, **then** the duck rating functionality is complete. |
+| PRD-3 | As a duck enthusiast, I want to be able to log in so that I can save the ducks I've submitted | **Given** The app functions, **when** users can log into their account, **then** login functionality is complete|
 
 ---
 
@@ -70,4 +71,5 @@ test.
 
 | Date | PR | What changed and why |
 |---|---|---|
-| 10/29/26 | PR1 | Initial version |
+| 10/29/26 | Initial version |
+| 10/29/26 | PR1 | Updated to be about Rate My Duck |
