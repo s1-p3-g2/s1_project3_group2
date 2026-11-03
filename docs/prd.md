@@ -1,63 +1,44 @@
-# Product Requirements Document (PRD): `<product name>`
+# Product Requirements Document (PRD): Rate My Duck
 
 [Back to the Project 03 guide](../../../Users/paulc/Downloads/README.md)
 
-> Copy this file to `docs/prd.md` in your team repo and replace everything in angle brackets.
-> Keep it to **one page**. Commit it **before the group proposal presentation**; the commit date is checked.
-> After the presentation, change it only through pull requests, so the history shows what changed and why.
-> Your Final Submission is graded against this document.
-
-**Team:** `<team name>` · **Repo:** `<link>` · **Last updated:** `<date>`
+**Team:** Rate My Duck · **Repo:** https://github.com/s1-p3-g2/s1_project3_group2 · **Last updated:** 11/2/2026
 
 ---
 
 ## 1. Users
 
-Who is this for? Name **one** primary user type and describe them in one or two sentences.
-"Everyone" and "students" are not user types; "a first-year student looking for a study group for
-one specific course" is.
-
-- **Primary user:** `<who they are, what they are trying to do>`
-- **Secondary user (optional):** `<for example, an admin>`
+- **Primary user:** Someone who wants to rate and submit rubber ducks to be rated
+- **Secondary user (optional):** Someone who wants to make sure that no inaproprate ducks can taint the pool of options
 
 ## 2. Problem
 
-Two sentences: what the user struggles with today, and why existing options fall short.
-
-`<problem statement>`
+Rubber ducks are amazing beyond measure, letting us debug our code, bringing joy to our hearts, and any sane person has a large collection, but how can one empirically determine that their duck is the best rubber duck? Current mechanisms to rate ducks are either more broad ways to rate anything and thus not specialized, or are specialized in rating living ducks not the rubber ducks us programmers love.
 
 ## 3. Success measures
 
-Three measurable signals that would show the product works. Each one needs a number and a way to
-check it.
-
 | # | Measure | Target | How we check it |
 |---|---|---|---|
-| S1 | `<e.g., a new user creates their first study session>` | `<under 2 minutes>` | `<timed during the onboarding test>` |
-| S2 | | | |
-| S3 | | | |
+| 1 | Able to add a duck, and then see that duck | duck has a description, a live image, and a score of 0 | assert that the duck does not exist in the beginning, then assert that it does exist, has a score of zero, and that the link to the image is the same as the prepared live image |
+| 2 | Able to delete inappropriate ducks | inappropriate duck no longer exists | checked by asserting that the prepared duck no longer exists |
+| 3 | Able to rate a duck | after being rated negatively a duck with a rating of zero is -1, and after being rated positively it is 1 | checked by asserting the results from a baseline rateless duck |
 
 ## 4. Scope: MVP, vertical slice, and not building
 
-**MVP** is the smallest set of stories that makes *this* product useful. It always includes the
-account baseline (sign in with GitHub and Google, update profile, delete account) **plus** the
-stories specific to your product.
-
 - **MVP stories:** `<PRD-1, PRD-2, ...>` (listed in section 5)
-- **Vertical slice:** `<the one MVP story you will polish end to end and test with Playwright>`
-- **Not building (this term):** `<at least three things a reader might expect that you are deliberately leaving out>`
+  Getting the basics of the login, adding, rating, and viewing ducks listed in more detail in the section below.
+- **Vertical slice:** 
+The basic walk down of the mvp is login to your account, add a duck, look at that duck, then rate that duck
+- **Not building (this term):** Making other non duck tier lists, adding a way to upload a duck picture through downloads rather than using an already existing link, removing ducks due to bad ratings rather than individual admin decisions
 
 ## 5. User stories and acceptance criteria
 
-One row per MVP story. Each GitHub issue links to its story ID (`PRD-3`) and each story has at
-least one acceptance criterion in **Given / When / Then** form that someone outside the team could
-test.
-
 | ID | Story | Acceptance criteria |
 |---|---|---|
-| PRD-1 | As a `<user>`, I want to `<action>` so that `<benefit>`. | **Given** `<state>`, **when** `<action>`, **then** `<observable result>`. |
-| PRD-2 | | |
-| PRD-3 | | |
+| https://github.com/s1-p3-g2/s1_project3_group2/issues/15 | As a duck connoisseur, I want to submit my duck to be rated. | **Given** The app functions, **when** users are able to add a duck, **then** add duck routes and ui are done |
+| https://github.com/s1-p3-g2/s1_project3_group2/issues/16 | As a duck connoisseur, I want to see all ducks | **Given** The app functions, **when** users can navigate to the duck page and see all the ducks in the right order **then** the basic get path, and ui result is online |
+| https://github.com/s1-p3-g2/s1_project3_group2/issues/17 | As a duck curator, I want to rate a duck | **Given** That you are able to see the ducks you want to rate, **when** someone is able to rate a duck negatively and positively with others seeing the results, **then** the duck rating functionality is complete. |
+| https://github.com/s1-p3-g2/s1_project3_group2/issues/14 | As a duck enthusiast, I want to be able to log in so that I can save the ducks I've submitted | **Given** The app functions, **when** users can log into their account, **then** login functionality is complete|
 
 ---
 
@@ -65,4 +46,5 @@ test.
 
 | Date | PR | What changed and why |
 |---|---|---|
-| `<date>` | `#<n>` | Initial version |
+| 10/29/26 | Initial version |
+| 11/2/26 | PR1 | Updated to be about Rate My Duck |
