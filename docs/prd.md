@@ -28,37 +28,7 @@ Rubber ducks are amazing beyond measure, letting us debug our code, bringing joy
 - **MVP stories:** `<PRD-1, PRD-2, ...>` (listed in section 5)
   Getting the basics of the login, adding, rating, and viewing ducks listed in more detail in the section below.
 - **Vertical slice:** 
-
-Login
-
-Google OAuth
-
-GitHub OAuth
-
-Connect to the User data object and the API
-
-
-Add Duck
-
-Create add duck ui layout properly formatted to get the needed information
-
-make the necessary post route in the api itself
-
-
-View Tier List
-
-create the ranked list of ducks based on score with the image through the link in the duck object visible and consistent in size with the other images
-
-create the various get routes required to get this information
-
-
-Rate Duck
-
-add buttons to the viewable ducks to rate them, and a function to rate them without needing to go to the view page managed by someone else
-
-add the patch routes to the api needed to change the ducks score value
-
-
+The basic walk down of the mvp is login to your account, add a duck, look at that duck, then rate that duck
 - **Not building (this term):** Making other non duck tier lists, adding a way to upload a duck picture through downloads rather than using an already existing link, removing ducks due to bad ratings rather than individual admin decisions
 
 ## 5. User stories and acceptance criteria
