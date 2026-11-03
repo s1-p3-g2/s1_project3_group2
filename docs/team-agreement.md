@@ -30,6 +30,6 @@ Everyone on the team adds their name and GitHub username in the PR that commits 
 | Name    | GitHub  |
 |---------|---------|
 | Paul C. | paulert |
-|         |  |
+| Alyosha  | Alyosha-ctrl |
 |         |  |
 |         |  |
