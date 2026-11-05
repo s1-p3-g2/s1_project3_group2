@@ -23,8 +23,8 @@ info:
 #    description: Production (replace in Sprint 3)
 
 # Every endpoint requires a Bearer token unless it overrides this with `security: []`.
-#security: TODO Finish this when implemented
-#  - bearerAuth: []
+security:
+  - bearerAuth: []
 
 tags:
   - name: Unregistered
@@ -65,9 +65,7 @@ paths:
 #        '404':
 #          $ref: '#/components/responses/NotFound'
 
-  /api/v1/example:
-    parameters:
-      - $ref: '#/components/parameters/ExampleId'
+  /api/v1/example: # TODO: Delete before releasing
     get:
       tags: [ Unregistered, Users, Ducks ]
       operationId: ExampleRoute
@@ -101,7 +99,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExampleRequest'
+              $ref: '#/components/schemas/ExamplePost'
       responses:
         '201':
           description: Example created
@@ -415,16 +413,45 @@ components:
       type: object
       minProperties: 1
       properties:
-        Attribute1:
-          $ref: '#/components/schemas/User'
         Attribute2:
           type: string
           maxLength: 1000
+        Attribute3:
+          type: boolean
+
+    ExamplePost: # TODO: Delete before releasing
+      type: object
+      required: [ Attribute1, Attribute2, Attribute3]
+      properties:
+        Attribute1:
+          type: string
+          maxLength: 1000
+        Attribute2:
+          type: string
+          maxLength: 1000
+        Attribute3:
+          type: boolean
+
+    ExampleObject: # TODO: Delete before releasing
+      type: object
+      required: [ exampleId, Attribute1, Attribute2, Attribute3 ]
+      properties:
+        exampleId:
+          type: integer
+          format: int64
+        Attribute1:
+          type: integer
+          format: int64
+        Attribute2:
+          type: string
+          maxLength: 1000
+        Attribute3:
+          type: boolean
 
 
     Ducks:
       type: object
-      required: [ duckId, name, image_link, description, creator_id, rating_score, position ]
+      required: [ duckId, name, imageLink, description, creatorId, ratingScore, position ]
       properties:
         duckId:
           type: integer
@@ -433,7 +460,7 @@ components:
         name:
           type: string
           example: "Suit Duck"
-        image_link:
+        imageLink:
           type: string
           example: https://.../duck-4x.png
         description:
@@ -444,9 +471,20 @@ components:
           format: int64
           example: 7
           description: Represents the user id of the user who created the duck.
+        ratingScore:
+          type: integer
+          format: int64
+          example: 132
+          description: The current difference between positive and negative ratings.
+        position:
+          type: integer
+          format: int64
+          example: 1
+          description: The position of the duck in the list of all ducks.
+
     User:
       type: object
-      required: [ userId, username, role, createdAt ]
+      required: [ userId, username, bio, profilePictureLink, role, oauthSubject ]
       properties:
         userId:
           type: integer
@@ -542,7 +580,7 @@ components:
           maxLength: 1000
           example: "This is a comment."
 
-    Role: # Represnts DB enum
+    Role: # Represents DB enum
       type: string
       enum: [ USER, CULLER, CURATOR, ADMIN ]
 
