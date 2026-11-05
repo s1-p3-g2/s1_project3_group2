@@ -32,4 +32,4 @@ Everyone on the team adds their name and GitHub username in the PR that commits 
 | Paul C. | paulert |
 | Alyosha | Alyosha-ctrl |
 | Billy P.| BillyP2002  |
-|         |  |
+| Victoria H.| VHA4493  |
