@@ -1,1 +1,399 @@
-Nothing ATM
+# OpenAPI contract for CST 438 Project 02.
+# Render it:   https://editor.swagger.io  (File > Import file, or paste)
+# Lint it:     npx @redocly/cli lint docs/openapi.yaml
+# Mock it:     npx @stoplight/prism-cli mock docs/openapi.yaml   -> http://127.0.0.1:4010
+openapi: 3.0.3
+
+info:
+  title: Rate My Duck API
+  version: 1.0.0
+  description: |
+    Users create, view, and rate rubber ducks.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  contact:
+    name: Project 3, Team 02
+    url: https://github.com/s1-p3-g2/s1_project3_group2
+
+#servers: TODO Finish this when implemented
+#  - url: http://localhost:8080
+#    description: Local (docker compose up)
+#  - url: https://your-api.example.com
+#    description: Production (replace in Sprint 3)
+
+# Every endpoint requires a Bearer token unless it overrides this with `security: []`.
+#security: TODO Finish this when implemented
+#  - bearerAuth: []
+
+tags:
+  - name: Unregistered
+    description: Endpoints accessible to all unauthenticated users
+  - name: User
+    description: Endpoints accessible to all signed-in users
+  - name: Culler
+    description: Endpoints accessible to all users with the "Culler" role
+  - name: Curator
+    description: Endpoints accessible to all users with the "Curator" role
+  - name: Admin
+    description: Endpoints accessible to all users with the Admin role
+  - name: Users
+    description: Endpoints related to Users
+  - name: Ducks
+    description: Endpoints related to Ducks
+  - name: Ratings
+    description: Endpoints related to Ratings
+  - name: Comments
+    description: Endpoints related to Comments
+
+
+paths:
+#  /auth/me: TODO Revist later when oauth is implemented
+#    get:
+#      tags: [Registered]
+#      operationId: getCurrentUser
+#      summary: Get the application account for the authenticated Google identity
+#      responses:
+#        '200':
+#          description: The current account
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/User'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+
+  /api/v1/example:
+    parameters:
+      - $ref: '#/components/parameters/ExampleId'
+    get:
+      tags: [ Unregistered, Users, Ducks ]
+      operationId: ExampleRoute
+      summary: List examples
+      description: Represents an example route.
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '200':
+          description: The invites to the specified event
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/InvitePage'
+    post:
+      tags: [ Add them here ]
+      operationId: createExample
+      summary: Yea
+      description: Yea
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExampleRequest'
+      responses:
+        '201':
+          description: Example created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExampleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT from the OAuth2 Authorization Code + PKCE flow (with Google, send the ID token; Google's access_token is opaque).
+
+  parameters:
+    ExampleId: # TODO: Delete before releasing
+      name: exampleId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 42
+    DuckId:
+      name: duckId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 42
+    UserId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 7
+    CommentId:
+      name: commentId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 7
+    Page:
+      name: page
+      in: query
+      description: Zero-based page number
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    Size:
+      name: size
+      in: query
+      description: Items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  schemas:
+    # Used to dictate what users see, different than the base entity declarations below the examples
+    ExampleResponse:
+      type: object
+      required: [ Attribute2 ]
+      properties:
+        Attribute2:
+          type: string
+
+
+    PageMeta:
+      description: Pagination metadata returned inside each list response's page property.
+      type: object
+      required: [ size, number, totalElements, totalPages ]
+      properties:
+        size:
+          type: integer
+          example: 20
+        number:
+          type: integer
+          example: 0
+        totalElements:
+          type: integer
+          format: int64
+          example: 57
+        totalPages:
+          type: integer
+          example: 3
+
+    ExamplePage:  # TODO: Delete before releasing
+      type: object
+      required: [ content, page ]
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+
+    ExamplePatch:  # TODO: Delete before releasing
+      type: object
+      minProperties: 1
+      properties:
+        Attribute1:
+          $ref: '#/components/schemas/User'
+        Attribute2:
+          type: string
+          maxLength: 1000
+
+
+    Ducks:
+      type: object
+      required: [ duckId, name, image_link, description, creator_id, rating_score, position ]
+      properties:
+        duckId:
+          type: integer
+          format: int64
+          example: 42
+        name:
+          type: string
+          example: "Suit Duck"
+        image_link:
+          type: string
+          example: https://.../duck-4x.png
+        description:
+          type: string
+          example: "A duck that is suit colored."
+        creatorId:
+          type: integer
+          format: int64
+          example: 7
+          description: Represents the user id of the user who created the duck.
+    User:
+      type: object
+      required: [ userId, username, role, createdAt ]
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 3
+        username:
+          type: string
+          maxLength: 100
+        bio:
+          type: string
+          maxLength: 1000
+        profilePictureLink:
+          type: string
+          maxLength: 1000
+        role:
+          $ref: '#/components/schemas/Role'
+        oauthSubject:
+          type: string
+          nullable: true
+
+    Ratings:
+      type: object
+      required: [ userId, duckId, isPositive]
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 3
+        duckId:
+          type: integer
+          format: int64
+          example: 4
+        isPositive:
+          type: boolean
+          example: true
+          description: Whether the user liked the duck or not.
+
+    Comments:
+      type: object
+      required: [ commentId, userId, duckId, comment ]
+      properties:
+        commentId:
+          type: integer
+          format: int64
+          example: 42
+        userId:
+          type: integer
+          format: int64
+          example: 7
+        duckId:
+          type: integer
+          format: int64
+          example: 42
+        comment:
+          type: string
+          maxLength: 1000
+          example: "This is a comment."
+
+    Role: # Represnts DB enum
+      type: string
+      enum: [ USER, CULLER, CURATOR, ADMIN ]
+
+    Problem:
+      description: RFC 9457 Problem Details. The ONE error body every endpoint returns.
+      type: object
+      required: [ title, status ]
+      properties:
+        type:
+          type: string
+          default: about:blank
+        title:
+          type: string
+          example: Not Found
+        status:
+          type: integer
+          example: 404
+        detail:
+          type: string
+          example: Workout 42 not found
+        instance:
+          type: string
+          example: /api/v1/workouts/42
+
+  responses:
+    BadRequest:
+      description: Validation failed or malformed JSON
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            title: Bad Request
+            status: 400
+            detail: One or more fields failed validation. Check the request against the contract.
+    Unauthorized:
+      description: Missing or invalid token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            title: Unauthorized
+            status: 401
+    Forbidden:
+      description: Valid token, but not allowed (for example, not an admin)
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            title: Forbidden
+            status: 403
+    NotFound:
+      description: Doesn't exist, or belongs to someone else
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            title: Not Found
+            status: 404
+            detail: Workout 42 not found
+    InternalError:
+      description: Unexpected server error. Your app still needs to show something useful.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            title: Internal Server Error
+            status: 500
+    Conflict:
+      description: The invite conflicts with the current resource state, such as an existing invite.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            title: Conflict
+            status: 409
