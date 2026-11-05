@@ -122,6 +122,196 @@ paths:
         '409':
           $ref: '#/components/responses/Conflict'
 
+
+  /api/v1/ratings:
+    get:
+      tags: [ Admin, Ducks ]
+      operationId: getDuckRatings
+      summary: Get a page of duck ratings
+      description: Get the ratings for a duck
+      responses:
+        '200':
+          description: The ratings for the specified duck
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RatingPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags: [ Admin, Ducks ]
+      operationId: rateDuck
+      summary: Create a duck rating
+      description: Forcefully make a user rate a duck
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ratings'
+      responses:
+        '201':
+          description: Rating created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RatingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+          
+  /api/v1/ratings/ducks/{duckId}:
+    get:
+      tags: [ Admin, Ducks, Ratings ]
+      operationId: getRatingsByDuck
+      summary: Get ratings for a duck
+      description: Get a page of ratings for the specified duck.
+      parameters:
+        - $ref: '#/components/parameters/DuckId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        '200':
+          description: The ratings for the specified duck
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+
+  /api/v1/ratings/users/{userId}:
+    get:
+      tags: [ Admin, Users, Ratings ]
+      operationId: getRatingsByUser
+      summary: Get ratings by a user
+      description: Get a page of ratings created by the specified user.
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        '200':
+          description: The ratings created by the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/v1/ratings/ducks/{duckId}/users/{userId}:
+    get:
+      tags: [ Admin, Ducks, Users, Ratings ]
+      operationId: getDuckRating
+      summary: Get a duck rating
+      description: Get a specific user's rating for a duck.
+      parameters:
+        - $ref: '#/components/parameters/DuckId'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: The rating for the specified duck and user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    patch:
+      tags: [ Admin, Ducks, Users, Ratings ]
+      operationId: updateDuckRating
+      summary: Update a duck rating
+      description: Update a user's rating for a duck.
+      parameters:
+        - $ref: '#/components/parameters/DuckId'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatingPatch'
+      responses:
+        '200':
+          description: Rating updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags: [ Admin, Ducks, Users, Ratings ]
+      operationId: deleteDuckRating
+      summary: Delete a duck rating
+      description: Delete a specific user's rating for a duck.
+      parameters:
+        - $ref: '#/components/parameters/DuckId'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '204':
+          description: Rating deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+
 components:
   securitySchemes:
     bearerAuth:
@@ -183,7 +373,7 @@ components:
 
   schemas:
     # Used to dictate what users see, different than the base entity declarations below the examples
-    ExampleResponse:
+    ExampleResponse: # TODO delete before releasing
       type: object
       required: [ Attribute2 ]
       properties:
@@ -292,6 +482,43 @@ components:
         isPositive:
           type: boolean
           example: true
+          description: Whether the user liked the duck or not.
+
+    RatingResponse:
+      type: object
+      required: [ userId, duckId, isPositive ]
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 3
+        duckId:
+          type: integer
+          format: int64
+          example: 4
+        isPositive:
+          type: boolean
+          example: true
+          description: Whether the user liked the duck or not.
+
+    RatingPage:
+      type: object
+      required: [ content, page ]
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatingResponse'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+
+    RatingPatch:
+      type: object
+      minProperties: 1
+      properties:
+        isPositive:
+          type: boolean
+          example: false
           description: Whether the user liked the duck or not.
 
     Comments:
