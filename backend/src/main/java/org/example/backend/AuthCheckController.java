@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 /**
  * @author Victoria Ha
  * @version 0.1.0
- * Description:
+ * Description: api routes controller uwu
  * @since 11/9/2026
  */
 @RestController
