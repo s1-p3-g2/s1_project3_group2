@@ -71,5 +71,7 @@ CREATE INDEX users_username_index ON users USING btree (username);
 CREATE INDEX ratings_user_id_index ON ratings USING btree (user_id); -- Composite Primary Keys efficiently index the starting attribute, not any others
 
 -- Comment Indices
-CREATE INDEX comments_user_id_index ON comments USING btree (user_id); -- Composite Primary Keys efficiently index the starting attribute, not any others
+CREATE INDEX comments_user_id_index ON comments USING btree (user_id);
+CREATE INDEX comments_user_id_index ON comments USING btree (duck_id);
+
 COMMIT;
