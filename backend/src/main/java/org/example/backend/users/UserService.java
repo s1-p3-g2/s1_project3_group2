@@ -30,7 +30,7 @@ public class UserService {
     //User lookup
     public User findUser(String provider, String providerUserId) {
         return userRepository
-                .findByProviderAndProviderUserId(provider, providerUserId)
+                .findByProviderAndAuthSub(provider, providerUserId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "User not found"
@@ -40,7 +40,7 @@ public class UserService {
     //admin check
     public boolean isAdmin(String provider, String providerUserId) {
         return userRepository
-                .findByProviderAndProviderUserId(provider, providerUserId)
+                .findByProviderAndAuthSub(provider, providerUserId)
                 .map(User::isAdmin)
                 .orElse(false);
     }
@@ -104,7 +104,7 @@ public class UserService {
         String providerUserId = oauth.getName();
 
         return userRepository
-                .findByProviderAndProviderUserId(provider, providerUserId)
+                .findByProviderAndAuthSub(provider, providerUserId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.FORBIDDEN,
                         "No app user exists for this session."

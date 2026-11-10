@@ -19,7 +19,7 @@ public class User {
     private String username;
     @Column(nullable = false, length = 10)
     private String provider;
-    @Column(name = "provider_user_id", nullable = false, length = 255);
+    @Column(name = "provider_user_id", nullable = false, length = 255)//oh my fucking god. there was a semicolon here and nobody yelled at me for it
     private String authSub;
     @Column(length = 250)
     private String bio;
