@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author Paul Conner
@@ -12,10 +13,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  **/
 
+@Repository
 public interface RatingRepository extends JpaRepository<Rating, RatingId> {
-  Page<Rating> findByDuck_DuckId(int duckId, Pageable pageable);
+  Page<Rating> findAll(Pageable pageable);
 
-  Page<Rating> findByUser_UserId(int userId, Pageable pageable);
+  Page<Rating> findByDuckId(int duckId, Pageable pageable);
 
-  Optional<Rating> findByDuck_DuckIdAndUser_UserId(int duckId, int userId);
+  Page<Rating> findByUserId(int userId, Pageable pageable);
+
+  Optional<Rating> findByDuckIdAndUserId(int duckId, int userId);
+
+  long deleteByDuckIdAndUserId(int duckId, int userId);
 }
