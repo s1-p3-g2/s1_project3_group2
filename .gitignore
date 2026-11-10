@@ -12,6 +12,9 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+#oaUTH ENVIRONMENT?
+.rate-my-duck.env
+
 # AWS User-specific
 .idea/**/aws.xml
 
