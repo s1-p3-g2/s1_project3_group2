@@ -1,15 +1,13 @@
-package main.java.org.example.backend.rating;
+package java.org.example.backend.rating;
 
-import org.example.backend.rating.Rating;
-import org.example.backend.rating.RatingRepository;
-
-
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import main.java.org.example.backend.rating.RatingRepository;
 import main.java.org.example.backend.utils.UserUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.org.example.backend.rating.Rating;
 
 /**
  * @author Paul Conner
@@ -18,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  **/
 
 public class RatingService {
-  private RatingRepository ratingRepository;
+  private final RatingRepository ratingRepository;
 
   public RatingService(RatingRepository ratingRepository) {
     this.ratingRepository = ratingRepository;
@@ -30,7 +28,7 @@ public class RatingService {
    */
   // TODO: Think about returning Ratings or new rating response to gate information from users
   @Transactional(readOnly = true)
-  public Page<Rating> getRatings(Pageable pageable) throws NotImplementedException {
+  public Page<Rating> getRatings(Pageable pageable) {
     return ratingRepository.findAll(pageable);
   }
 
@@ -81,7 +79,7 @@ public class RatingService {
    */
   // TODO: Implement this
   @Transactional
-  public void deleteRating(int userId, int duckId) throws NotImplementedException {
+  public void deleteRating(int userId, int duckId) {
     long result = ratingRepository.deleteByDuckIdAndUserId(duckId, userId);
     if (result != 1) {
       throw new RuntimeException("deleteRating: Deleted more than the intended row");
@@ -109,6 +107,10 @@ public class RatingService {
             rating.getRatingId().getDuckId(),
             rating.getRatingId().getUserId()
     ).orElse(null); // TODO: Handle or else better
+    if (result == null) {
+      throw new RuntimeException("changeRating: Requested rating does not exist");
+    }
+    return ratingRepository.save(rating);
   }
 
   /**
@@ -120,12 +122,15 @@ public class RatingService {
   @Transactional(readOnly = true)
   public Rating getMyRating(int duckId, Authentication auth) {
     int userId = UserUtils.getUserIdFromAuth(auth);
-    return ratingRepository.findByDuckIdAndUserId(duckId, userId).orElse(null); // TODO: Handle or else better
+    Rating result = ratingRepository.findByDuckIdAndUserId(duckId, userId).orElse(null); // TODO: Handle or else better
+    if (result == null) {
+      throw new RuntimeException("getMyRating: Requested rating does not exist");
+    }
+    return result;
   }
 
-    /**
+  /**
    * Views ratings based on supplied auth
-   
    */
   // TODO: Implement this
   // TODO: Think about returning Ratings or new rating response to gate information from users

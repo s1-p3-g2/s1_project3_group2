@@ -11,5 +11,4 @@ public record RatingDTO (
     int duckId,
     int userId,
     int isPositive
-)
-{}
+) {}

@@ -1,10 +1,5 @@
 package main.java.org.example.backend.rating;
 
-import org.example.backend.rating.Rating;
-import main.java.org.example.backend.rating.RatingService;
-
-import jdk.jshell.spi.ExecutionControl;
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -15,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.org.example.backend.rating.Rating;
+import java.org.example.backend.rating.RatingService;
 
 /**
  * @author Paul Conner
@@ -30,13 +28,13 @@ public class RatingController {
 
   // TODO: Implement this
   @GetMapping
-  public Page<Rating> getRatings(Pageable pageable) throws NotImplementedException {
+  public Page<Rating> getRatings(Pageable pageable) {
     return ratingService.getRatings(pageable);
   }
 
   // TODO: Implement this
   @PostMapping
-  public Rating createRating(@RequestBody Rating rating) throws NotImplementedException {
+  public Rating createRating(@RequestBody Rating rating) {
     return ratingService.createRating(rating);
   }
 
@@ -44,44 +42,44 @@ public class RatingController {
   // No need for patch, all fields are required to edit a rating
   // TODO: Implement this
   @PutMapping
-  public Rating updateRating(@RequestBody Rating rating) throws NotImplementedException {
+  public Rating updateRating(@RequestBody Rating rating) {
     return ratingService.changeRating(rating);
   }
 
   // TODO: Implement this
   @DeleteMapping("/ducks/{duckId}/users/{userId}")
-  public void deleteRating(@PathVariable int duckId, @PathVariable int userId) throws NotImplementedException {
+  public void deleteRating(@PathVariable int duckId, @PathVariable int userId) {
     ratingService.deleteRating(userId, duckId);
   }
 
   @GetMapping("/ducks/{duckId}")
-  public Page<Rating> getRatingsByDuck(@PathVariable int duckId, Pageable pageable) throws NotImplementedException {
+  public Page<Rating> getRatingsByDuck(@PathVariable int duckId, Pageable pageable) {
     return ratingService.getRatingsByDuck(duckId, pageable);
   }
 
   // TODO: Implement this
   @GetMapping("/users/{userId}")
-  public Page<Rating> getRatingsByUser(@PathVariable int userId, Pageable pageable) throws NotImplementedException {
+  public Page<Rating> getRatingsByUser(@PathVariable int userId, Pageable pageable) {
     return ratingService.getRatingsByUser(userId, pageable);
   }
 
   // TODO: Implement this
   @GetMapping("/ducks/{duckId}/users/{userId}")
-  public Rating getRating(@PathVariable int duckId, @PathVariable int userId) throws NotImplementedException {
+  public Rating getRating(@PathVariable int duckId, @PathVariable int userId) {
     return ratingService.getRating(userId, duckId);
   }
 
   // TODO: Implement this
   // TODO: Think about request body more, use DTO or no
   @GetMapping("/me/{duckId}")
-  public Rating getMyRating(@PathVariable int duckId, Authentication auth) throws NotImplementedException {
+  public Rating getMyRating(@PathVariable int duckId, Authentication auth) {
     return ratingService.getMyRating(duckId, auth);
   }
 
   // TODO: Implement this
   // TODO: Think about request body more, use DTO or no
   @GetMapping("/me")
-  public Page<Rating> getMyRatings(Authentication auth, Pageable pageable) throws NotImplementedException {
+  public Page<Rating> getMyRatings(Authentication auth, Pageable pageable) {
     return ratingService.getMyRatings(auth, pageable);
   }
 
@@ -89,7 +87,7 @@ public class RatingController {
   // TODO: Think about request body more, use DTO or no
   // TODO: Revisit when oauth is implemented
   @PostMapping("/me/{duckId}")
-  public Rating makeMyRating(@PathVariable int duckId, @RequestBody boolean isPositive, Authentication auth) throws NotImplementedException {
+  public Rating makeMyRating(@PathVariable int duckId, @RequestBody boolean isPositive, Authentication auth) {
     return ratingService.makeMyRating(duckId, auth, isPositive);
   }
 
@@ -97,7 +95,7 @@ public class RatingController {
   // TODO: Think about request body more, use DTO or no
   // TODO: Revisit when oauth is implemented
   @DeleteMapping("/me/{duckId}")
-  public void deleteMyRating(@PathVariable int duckId, Authentication auth) throws NotImplementedException {
+  public void deleteMyRating(@PathVariable int duckId, Authentication auth) {
     ratingService.deleteMyRating(duckId, auth);
   }
 
@@ -105,7 +103,7 @@ public class RatingController {
   // TODO: Think about request body more, use DTO or no
   // TODO: Revisit when oauth is implemented
   @PutMapping("/me/{duckId}")
-  public Rating changeMyRating(@PathVariable int duckId, @RequestBody boolean isPositive, Authentication auth) throws NotImplementedException {
+  public Rating changeMyRating(@PathVariable int duckId, @RequestBody boolean isPositive, Authentication auth) {
     return ratingService.changeMyRating(duckId, auth, isPositive);
   }
 }
