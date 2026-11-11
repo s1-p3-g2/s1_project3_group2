@@ -1,11 +1,15 @@
 package org.example.backend.rating;
 
+import org.example.backend.rating.dtos.DuckRankingResponse;
+import org.example.backend.rating.dtos.RatingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.example.backend.utils.UserUtils;
+
+// TODO: review error handling at a later point
 
 @Service
 public class RatingService {
@@ -21,10 +25,10 @@ public class RatingService {
    *
    * @param pageable
    */
-  // TODO: Think about returning Ratings or new rating response to gate information from users
   @Transactional(readOnly = true)
-  public Page<Rating> getRatings(Pageable pageable) {
-    return ratingRepository.findAll(pageable);
+  public Page<RatingResponse> getRatings(Pageable pageable) {
+    return ratingRepository.findAll(pageable)
+        .map(this::ratingResponseInit);
   }
 
 
@@ -33,11 +37,10 @@ public class RatingService {
    *
    * @param userId 1-indexed, an user_id from the user table
    */
-  // TODO: Implement this
-  // TODO: Think about returning Ratings or new rating response to gate information from users
   @Transactional(readOnly = true)
-  public Page<Rating> getRatingsByUser(int userId, Pageable pageable) {
-    return ratingRepository.findByRatingId_UserId(userId, pageable);
+  public Page<RatingResponse> getRatingsByUser(int userId, Pageable pageable) {
+    return ratingRepository.findByRatingId_UserId(userId, pageable)
+        .map(this::ratingResponseInit);
   }
 
   /**
@@ -45,11 +48,10 @@ public class RatingService {
    *
    * @param duckId 1-indexed, a duck_id from the duck table
    */
-  // TODO: Implement this
-  // TODO: Think about returning Ratings or new rating response to gate information from users
   @Transactional(readOnly = true)
-  public Page<Rating> getRatingsByDuck(int duckId, Pageable pageable) {
-    return ratingRepository.findByRatingId_DuckId(duckId, pageable);
+  public Page<RatingResponse> getRatingsByDuck(int duckId, Pageable pageable) {
+    return ratingRepository.findByRatingId_DuckId(duckId, pageable)
+        .map(this::ratingResponseInit);
   }
 
   /**
@@ -58,14 +60,12 @@ public class RatingService {
    * @param userId 1-indexed, a user_id from the user table
    * @param duckId 1-indexed, a duck_id from the duck table
    */
-  // TODO: Implement this
-  // TODO: Think about returning a Rating or new rating response to gate information from users
   @Transactional(readOnly = true)
-  public Rating getRating(int userId, int duckId) {
-    return ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId)
+  public RatingResponse getRating(int userId, int duckId) {
+    return ratingResponseInit(ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId)
         .orElseThrow(() ->
             new RuntimeException("getRating: Requested rating doesnt exist")
-        );
+        ));
   }
 
   /**
@@ -74,7 +74,6 @@ public class RatingService {
    * @param userId 1-indexed, a user_id from the user table
    * @param duckId 1-indexed, a duck_id from the duck table Not Implemented
    */
-  // TODO: Implement this
   @Transactional
   public void deleteRating(int userId, int duckId) {
     ratingRepository.deleteByRatingId_DuckIdAndRatingId_UserId(duckId, userId);
@@ -85,11 +84,10 @@ public class RatingService {
    *
    * @param rating Rating to be created, contains user_id, duck_id, and isPositive
    */
-  // TODO: Implement this
-  // TODO: Think about returning Ratings or new rating response to gate information from users
+
   @Transactional
-  public Rating createRating(Rating rating) {
-    return ratingRepository.save(rating);
+  public RatingResponse createRating(Rating rating) {
+    return ratingResponseInit(ratingRepository.save(rating));
   }
 
   /**
@@ -98,7 +96,7 @@ public class RatingService {
    * @param rating Rating to be changed, contains user_id, duck_id, and isPositive
    */
   @Transactional
-  public Rating changeRating(Rating rating) {
+  public RatingResponse changeRating(Rating rating) {
     Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(
             rating.getRatingId().getDuckId(),
             rating.getRatingId().getUserId()
@@ -108,43 +106,40 @@ public class RatingService {
         );
     // Flips boolean value of rating, can only change boolean
     result.setPositive(!rating.isPositive());
-    return ratingRepository.save(result);
+    return ratingResponseInit(ratingRepository.save(result));
   }
 
   /**
    * Views ratings based on supplied auth
    */
-  // TODO: Implement this
-  // TODO: Think about returning Ratings or new rating response to gate information from users
   // TODO: Revisit when oauth is implemented
   @Transactional(readOnly = true)
-  public Rating getMyRating(int duckId, Authentication auth) {
+  public RatingResponse getMyRating(int duckId, Authentication auth) {
     int userId = UserUtils.getUserIdFromAuth(auth);
-    return ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId)
+    return ratingResponseInit(ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId)
         .orElseThrow(() ->
             new RuntimeException("getMyRating: Requested rating does not exist")
-        );
+        ));
   }
 
   /**
    * Views ratings based on supplied auth
    */
-  // TODO: Implement this
-  // TODO: Think about returning Ratings or new rating response to gate information from users
   // TODO: Revisit when oauth is implemented
   @Transactional(readOnly = true)
-  public Page<Rating> getMyRatings(Authentication auth, Pageable pageable) {
+  public Page<RatingResponse> getMyRatings(Authentication auth, Pageable pageable) {
     int userId = UserUtils.getUserIdFromAuth(auth);
-    return ratingRepository.findByRatingId_UserId(userId, pageable);
+    // Uses custom function to replace instances of Ratings with RatingResponses
+    return ratingRepository.findByRatingId_UserId(userId, pageable)
+        .map(this::ratingResponseInit);
   }
 
   /**
    * Changes a rating based on supplied auth and duck id
    */
-  // TODO: Implement this
   // TODO: Revisit when oauth is implemented
   @Transactional
-  public Rating changeMyRating(int duckId, Authentication auth, boolean isPositive) {
+  public RatingResponse changeMyRating(int duckId, Authentication auth, boolean isPositive) {
     int userId = UserUtils.getUserIdFromAuth(auth);
     Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId)
         .orElseThrow(() ->
@@ -156,13 +151,12 @@ public class RatingService {
           "changeMyRating: Desired rating is the same as the current rating");
     }
     result.setPositive(isPositive);
-    return ratingRepository.save(result);
+    return ratingResponseInit(ratingRepository.save(result));
   }
 
   /**
    * Deletes a rating based on supplied auth and duck id
    */
-  // TODO: Implement this
   // TODO: Revisit when oauth is implemented
   @Transactional
   public void deleteMyRating(int duckId, Authentication auth) {
@@ -178,31 +172,38 @@ public class RatingService {
   /**
    * Makes a rating based on supplied auth and duck id
    */
-  // TODO: Implement this
   // TODO: Revisit when oauth is implemented
   @Transactional
-  public Rating makeMyRating(int duckId, Authentication auth, boolean isPositive) {
+  public RatingResponse makeMyRating(int duckId, Authentication auth, boolean isPositive) {
     int userId = UserUtils.getUserIdFromAuth(auth);
     if (ratingRepository
         .findByRatingId_DuckIdAndRatingId_UserId(duckId, userId)
         .isPresent()) {
       throw new RuntimeException("makeMyRating: Rating already exists");
     }
-    return ratingRepository.save(new Rating(userId, duckId, isPositive));
+    // Uses a custom mapping function
+    return ratingResponseInit(ratingRepository.save(new Rating(userId, duckId, isPositive)));
   }
 
+  /**
+   * Gets overall rating information about a duck
+   */
   @Transactional(readOnly = true)
-  public int getDuckScore(int duckId) {
-    return ratingRepository.getDuckRatingScore(duckId).orElseThrow(() ->
-        new RuntimeException("getDuckScore: Unknown repository error during getDuckRatingScore")
+  public DuckRankingResponse getDuckRanking(int duckId) {
+    int score = ratingRepository.getDuckRatingScore(duckId).orElseThrow(() ->
+        new RuntimeException("getDuckRanking: Unknown repository error during getDuckRatingScore")
     );
+
+    int position = ratingRepository.getDuckRank(duckId).orElseThrow(() ->
+        new RuntimeException("getDuckRanking: Unknown repository error during getDuckRank")
+    );
+
+    return new DuckRankingResponse(duckId, score, position);
   }
 
-  @Transactional(readOnly = true)
-  public int getDuckPosition(int duckId) {
-    return ratingRepository.getDuckRank(duckId).orElseThrow(() ->
-        new RuntimeException("getDuckPosition: Unknown repository error during getDuckRank")
-    );
+  // Maps rating values to the response values
+  private RatingResponse ratingResponseInit(Rating rating) {
+    return new RatingResponse(rating.getRatingId().getUserId(), rating.getRatingId().getDuckId(), rating.isPositive());
   }
 
 }
