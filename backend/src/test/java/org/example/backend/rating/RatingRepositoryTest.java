@@ -170,7 +170,7 @@ public class RatingRepositoryTest {
   }
 
   @Test
-  void getRatingScoreTest(){
+  void findRatingScoreTest(){
     int score1 = ratingRepository.getDuckRatingScore(1).orElse(0);
     int score2 = ratingRepository.getDuckRatingScore(2).orElse(0);
     int score3 = ratingRepository.getDuckRatingScore(3).orElse(0);
@@ -180,7 +180,7 @@ public class RatingRepositoryTest {
   }
 
   @Test
-  void getDuckPositionTest(){
+  void findDuckPositionTest(){
     int position1 = ratingRepository.getDuckRank(1).orElse(-1);
     int position2 = ratingRepository.getDuckRank(2).orElse(-1);
     int position3 = ratingRepository.getDuckRank(3).orElse(-1);
