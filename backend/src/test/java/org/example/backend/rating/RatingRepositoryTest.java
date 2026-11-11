@@ -79,7 +79,7 @@ public class RatingRepositoryTest {
 
   // This one is weird, already calls save all, so they should be retrievable
   @Test
-  void saveAllTest() {
+  void saveRatingsTest() {
     List<Rating> foundRatings = ratingRepository.findAll();
     assertTrue("Save all ratings is equal to list that filled it", foundRatings.equals(ratings));
   }

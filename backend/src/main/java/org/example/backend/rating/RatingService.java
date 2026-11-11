@@ -76,7 +76,10 @@ public class RatingService {
    */
   @Transactional
   public void deleteRating(int userId, int duckId) {
-    ratingRepository.deleteByRatingId_DuckIdAndRatingId_UserId(duckId, userId);
+    long numDel = ratingRepository.deleteByRatingId_DuckIdAndRatingId_UserId(duckId, userId);
+    if (numDel == 0) {
+      throw new RuntimeException("deleteRating: No such rating exists");
+    }
   }
 
   /**
@@ -197,6 +200,10 @@ public class RatingService {
     int position = ratingRepository.getDuckRank(duckId).orElseThrow(() ->
         new RuntimeException("getDuckRanking: Unknown repository error during getDuckRank")
     );
+
+    if (position < 1) {
+      throw new RuntimeException("getDuckRanking: Invalid Rank obtained from getDuckRank");
+    }
 
     return new DuckRankingResponse(duckId, score, position);
   }
