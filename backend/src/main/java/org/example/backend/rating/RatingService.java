@@ -1,19 +1,11 @@
-package java.org.example.backend.rating;
+package org.example.backend.rating;
 
-import main.java.org.example.backend.rating.RatingRepository;
-import main.java.org.example.backend.utils.UserUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.org.example.backend.rating.Rating;
-
-/**
- * @author Paul Conner
- * @since
- *
- **/
+import org.example.backend.utils.UserUtils;
 
 public class RatingService {
   private final RatingRepository ratingRepository;
@@ -41,7 +33,7 @@ public class RatingService {
   // TODO: Think about returning Ratings or new rating response to gate information from users
   @Transactional(readOnly = true)
   public Page<Rating> getRatingsByUser( int userId, Pageable pageable) {
-    return ratingRepository.findByUserId(userId, pageable);
+    return ratingRepository.findByRatingId_UserId(userId, pageable);
   }
 
   /**
@@ -52,7 +44,7 @@ public class RatingService {
   // TODO: Think about returning Ratings or new rating response to gate information from users
   @Transactional(readOnly = true)
   public Page<Rating> getRatingsByDuck( int duckId, Pageable pageable) {
-    return ratingRepository.findByDuckId(duckId, pageable);
+    return ratingRepository.findByRatingId_DuckId(duckId, pageable);
   }
 
   /**
@@ -64,7 +56,7 @@ public class RatingService {
   // TODO: Think about returning a Rating or new rating response to gate information from users
   @Transactional(readOnly = true)
   public Rating getRating(int userId, int duckId) {
-    Rating result = ratingRepository.findByDuckIdAndUserId(duckId, userId).orElse(null); // TODO: Handle or else better
+    Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId).orElse(null); // TODO: Handle or else better
     if (result == null) {
       throw new RuntimeException("getRating: Requested rating doesnt exist");
     }
@@ -80,7 +72,7 @@ public class RatingService {
   // TODO: Implement this
   @Transactional
   public void deleteRating(int userId, int duckId) {
-    long result = ratingRepository.deleteByDuckIdAndUserId(duckId, userId);
+    long result = ratingRepository.deleteByRatingId_DuckIdAndRatingId_UserId(duckId, userId);
     if (result != 1) {
       throw new RuntimeException("deleteRating: Deleted more than the intended row");
     }
@@ -103,7 +95,7 @@ public class RatingService {
    */
   @Transactional
   public Rating changeRating(Rating rating) {
-    Rating result = ratingRepository.findByDuckIdAndUserId(
+    Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(
             rating.getRatingId().getDuckId(),
             rating.getRatingId().getUserId()
     ).orElse(null); // TODO: Handle or else better
@@ -122,7 +114,7 @@ public class RatingService {
   @Transactional(readOnly = true)
   public Rating getMyRating(int duckId, Authentication auth) {
     int userId = UserUtils.getUserIdFromAuth(auth);
-    Rating result = ratingRepository.findByDuckIdAndUserId(duckId, userId).orElse(null); // TODO: Handle or else better
+    Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId).orElse(null); // TODO: Handle or else better
     if (result == null) {
       throw new RuntimeException("getMyRating: Requested rating does not exist");
     }
@@ -138,7 +130,7 @@ public class RatingService {
   @Transactional(readOnly = true)
   public Page<Rating> getMyRatings(Authentication auth, Pageable pageable) {
     int userId = UserUtils.getUserIdFromAuth(auth);
-    return ratingRepository.findByUserId(userId, pageable);
+    return ratingRepository.findByRatingId_UserId(userId, pageable);
   }
 
   /**
@@ -150,7 +142,7 @@ public class RatingService {
   @Transactional
   public Rating changeMyRating(int duckId, Authentication auth, boolean isPositive) {
     int userId = UserUtils.getUserIdFromAuth(auth);
-    Rating result = ratingRepository.findByDuckIdAndUserId(duckId, userId).orElse(null); // TODO: Handle or else better
+    Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId).orElse(null); // TODO: Handle or else better
     if (result == null){
       throw new RuntimeException("changeMyRating: Unknown error during findByDuckIdAndUserId");
     }
@@ -169,7 +161,7 @@ public class RatingService {
   @Transactional
   public void deleteMyRating(int duckId, Authentication auth) {
     int userId = UserUtils.getUserIdFromAuth(auth);
-    Rating result = ratingRepository.findByDuckIdAndUserId(duckId, userId).orElse(null); // TODO: Handle or else better
+    Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId).orElse(null); // TODO: Handle or else better
     if (result == null) {
       throw new RuntimeException("deleteMyRating: Unknown error during findByDuckIdAndUserId");
     }
@@ -185,7 +177,7 @@ public class RatingService {
   @Transactional
   public Rating makeMyRating(int duckId, Authentication auth, boolean isPositive) {
     int userId = UserUtils.getUserIdFromAuth(auth);
-    Rating result = ratingRepository.findByDuckIdAndUserId(duckId, userId).orElse(null); // TODO: Handle or else better
+    Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(duckId, userId).orElse(null); // TODO: Handle or else better
     if (result != null) {
       throw new RuntimeException("makeMyRating: Rating already exists");
     }
