@@ -1,5 +1,6 @@
 package org.example.backend.rating;
 
+import org.example.backend.rating.dtos.DuckRankingResponse;
 import org.example.backend.rating.dtos.RatingRequest;
 import org.example.backend.rating.dtos.RatingResponse;
 import org.springframework.data.domain.Page;
@@ -60,6 +61,11 @@ public class RatingController {
   @GetMapping("/ducks/{duckId}/users/{userId}")
   public RatingResponse getRating(@PathVariable int duckId, @PathVariable int userId) {
     return ratingService.getRating(userId, duckId);
+  }
+
+  @GetMapping("/rank/{duckId}")
+  public DuckRankingResponse getRating(@PathVariable int duckId) {
+    return ratingService.getDuckRanking(duckId);
   }
 
   @GetMapping("/me/{duckId}")
