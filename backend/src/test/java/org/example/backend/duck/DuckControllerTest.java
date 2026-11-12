@@ -1,15 +1,10 @@
-package org.example.backend;
+package org.example.backend.duck;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Map;
-
-import org.example.backend.controller.DuckController;
-import org.example.backend.dto.PostDuckRequest;
-import org.example.backend.dto.PostDuckResponse;
-import org.example.backend.service.DuckService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataAccessException;
