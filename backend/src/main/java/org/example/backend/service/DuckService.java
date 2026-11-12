@@ -29,13 +29,14 @@ public class DuckService {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO ducks (name, description, image_link, score) VALUES (?, ?, ?, ?)",
+                "INSERT INTO ducks (name, description, image_link, creator_id, rating_score) VALUES (?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
             );
             statement.setString(1, pdr.name());
             statement.setString(2, pdr.description());
             statement.setString(3, pdr.image_link());
-            statement.setInt(4, 0);
+            statement.setInt(4, pdr.creator_id());
+            statement.setInt(5, 0);
             return statement;
         }, keyHolder);
 
@@ -45,7 +46,7 @@ public class DuckService {
         }
 
         return jdbcTemplate.queryForObject(
-            "SELECT name, duck_id, description, image_link, score " +
+            "SELECT name, description, image_link, creator_id, duck_id" +
                 "FROM ducks WHERE duck_id = ?",
             (rs, rowNum) -> new PostDuckResponse(
                 rs.getString("name"),

@@ -33,9 +33,10 @@ CREATE TABLE ducks
     image_link   TEXT,
     description  TEXT,
     creator_id   INT REFERENCES users (user_id) ON DELETE SET NULL,
+    rating_score INT,
 );
-COMMENT ON COLUMN ducks.rating_score is 'Updated with every rating, or on a predefined schedule';
-COMMENT ON COLUMN ducks.position is 'Updated with every rating, or on a predefined schedule';
+COMMENT ON COLUMN ducks.rating_score is 'Updated with every rating';
+
 
 CREATE TABLE ratings
 (
