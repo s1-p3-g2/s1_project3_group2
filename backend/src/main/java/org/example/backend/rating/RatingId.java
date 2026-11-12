@@ -22,13 +22,11 @@ public class RatingId {
     this.duckId = duckId;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    RatingId other = (RatingId) o;
-    return userId == other.userId && duckId == other.duckId;
+  public RatingId() {
+
   }
+
+
 
   public int getUserId() {
     return userId;
@@ -44,5 +42,19 @@ public class RatingId {
 
   public void setDuckId(int duckId) {
     this.duckId = duckId;
+  }
+
+  // Required for repository equality checks
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    RatingId other = (RatingId) o;
+    return userId == other.userId && duckId == other.duckId;
+  }
+
+  @Override
+  public int hashCode() {
+    return java.util.Objects.hash(userId, duckId);
   }
 }
