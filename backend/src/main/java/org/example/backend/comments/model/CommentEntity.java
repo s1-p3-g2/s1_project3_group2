@@ -46,6 +46,10 @@ public class CommentEntity {
         return userId;
     }
 
+    public Integer getDuckId() {
+        return duckId;
+    }
+
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
