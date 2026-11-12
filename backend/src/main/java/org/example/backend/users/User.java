@@ -29,13 +29,14 @@ public class User {
     private boolean isAdmin;
 
     protected User(String username, String provider, String authSub, String bio, String profilePic) {
-        this.user_id = user_id;
         this.username = username;
         this.provider = provider;
         this.authSub = authSub;
         this.bio = bio;
         this.profilePic = profilePic;
         this.isAdmin = false;
+    }
+    protected User() {
     }
 
     public long getUserId() {

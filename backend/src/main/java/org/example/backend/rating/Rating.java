@@ -5,6 +5,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.util.Objects;
+import org.example.backend.duck.Duck;
 
 @Entity
 @Table(name = "ratings")
