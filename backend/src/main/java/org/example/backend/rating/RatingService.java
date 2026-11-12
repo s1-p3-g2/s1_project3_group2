@@ -1,6 +1,7 @@
 package org.example.backend.rating;
 
 import org.example.backend.rating.dtos.DuckRankingResponse;
+import org.example.backend.rating.dtos.RatingRequest;
 import org.example.backend.rating.dtos.RatingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,30 +86,46 @@ public class RatingService {
   /**
    * Creates a rating based on supplied information
    *
-   * @param rating Rating to be created, contains user_id, duck_id, and isPositive
+   * @param request - The user's request to be added
    */
-
+  // TODO: handle invalid users and ducks
   @Transactional
-  public RatingResponse createRating(Rating rating) {
-    return ratingResponseInit(ratingRepository.save(rating));
+  public RatingResponse createRating(RatingRequest request) {
+    if (request.duckId() < 0) {
+      throw new RuntimeException("createRating: Invalid duckId, less than zero");
+    }
+    if (request.userId() < 0) {
+      throw new RuntimeException("createRating: Invalid userId, less than zero");
+    }
+    if( ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(request.duckId(), request.userId()).isPresent()) {
+      throw new RuntimeException("createRating: Invalid request, rating already exists");
+    }
+    return ratingResponseInit(ratingRepository.save(ratingInit(request)));
   }
 
   /**
    * Changes a rating based on supplied information
    *
-   * @param rating Rating to be changed, contains user_id, duck_id, and isPositive
+   * @param request Rating to be changed, contains user_id, duck_id, and isPositive
    */
   @Transactional
-  public RatingResponse changeRating(Rating rating) {
+  public RatingResponse changeRating(RatingRequest request) {
+    if (request.duckId() < 0) {
+      throw new RuntimeException("changeRating: Invalid duckId, less than zero");
+    }
+    if (request.userId() < 0) {
+      throw new RuntimeException("changeRating: Invalid userId, less than zero");
+    }
+
     Rating result = ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(
-            rating.getRatingId().getDuckId(),
-            rating.getRatingId().getUserId()
+            request.duckId(),
+            request.userId()
         )
         .orElseThrow(() ->
             new RuntimeException("changeRating: Requested rating does not exist")
         );
     // Flips boolean value of rating, can only change boolean
-    result.setPositive(!rating.isPositive());
+    result.setPositive(request.isPositive());
     return ratingResponseInit(ratingRepository.save(result));
   }
 
@@ -208,9 +225,21 @@ public class RatingService {
     return new DuckRankingResponse(duckId, score, position);
   }
 
-  // Maps rating values to the response values
+  /**
+   * Converts ratings into rating response objects
+   * @param rating - The rating to be converted
+   * @return The resulting RatingResponse object constructed from rating
+   */
   private RatingResponse ratingResponseInit(Rating rating) {
     return new RatingResponse(rating.getRatingId().getUserId(), rating.getRatingId().getDuckId(), rating.isPositive());
   }
 
+  /**
+   * Converts rating requests into rating objects
+   * @param request - The RatingRequest object to be converted
+   * @return The resulting Rating object constructed from a request
+   */
+  private Rating ratingInit(RatingRequest request) {
+    return new Rating(request.userId(), request.duckId(), request.isPositive());
+  }
 }

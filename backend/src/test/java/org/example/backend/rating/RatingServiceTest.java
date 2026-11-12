@@ -3,6 +3,10 @@ package org.example.backend.rating;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,9 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.example.backend.rating.dtos.DuckRankingResponse;
+import org.example.backend.rating.dtos.RatingRequest;
 import org.example.backend.rating.dtos.RatingResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -208,44 +215,115 @@ public class RatingServiceTest {
   }
 
   @Test
-  void createRatingTest() {
-    Rating rating = new Rating(1, 1, false);
-    RatingResponse response = new RatingResponse(1, 1, false);
+  void createRatingOnsNewTest() {
+    Rating rating = new Rating(5,5,false);
+
+    // Mock a non-existent rating
+    when(ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(5,5))
+        .thenReturn(Optional.empty());
+    // Mock saving a non-existent rating
     when(ratingRepository.save(rating))
         .thenReturn(rating);
 
-    RatingResponse result = ratingService.createRating(rating);
+    RatingResponse result = ratingService.createRating(new RatingRequest(5,5,false));
 
-    assertEquals(response, result);
+    assertEquals(new RatingResponse(5,5,false), result);
 
-    verify(ratingRepository)
-        .save(rating);
-
-    assertThrows(
-        RuntimeException.class,
-        () -> ratingService.createRating(rating)
-    );
+    // Verify that non-existent rating was not found, then saved
+    verify(ratingRepository).findByRatingId_DuckIdAndRatingId_UserId(5,5);
+    verify(ratingRepository).save(rating);
   }
 
   @Test
-  void updateRatingTest() {
-    ratingRepository.save(new Rating(1, 1, false));
+  void createRatingOnExistingTest() {
+    // Mock an already present rating
+    Rating existingRating = new Rating(1,1, true);
+    when(ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(1,1))
+        .thenReturn(Optional.of(existingRating));
 
-    Rating updatedRating = new Rating(1, 1, true);
-    RatingResponse updatedResponse = new RatingResponse(1, 1, true);
+    // Throws error, on attempt to create something that already exists
+    assertThrows(
+        RuntimeException.class,
+        () -> ratingService.createRating(new RatingRequest(1,1,false))
+    );
 
-    when(ratingRepository.save(updatedRating)).thenReturn(updatedRating);
+    // Verify lookup happened, but not saving
+    verify(ratingRepository).findByRatingId_DuckIdAndRatingId_UserId(1,1);
+    verify(ratingRepository, never()).save(any());
+  }
 
-    RatingResponse response = ratingService.changeRating(updatedRating);
+  @Test
+  void createRatingOnNegativeIdTest(){
+    // Negative Ids should throw errors
+    assertThrows(
+        RuntimeException.class,
+        () -> ratingService.createRating(new RatingRequest(-1, 1, false))
+    );
+    assertThrows(
+        RuntimeException.class,
+        () -> ratingService.createRating(new RatingRequest(1, -1, false))
+    );
 
-    assertEquals(updatedResponse, response);
+    verify(ratingRepository, never()).findByRatingId_DuckIdAndRatingId_UserId(anyInt(), anyInt());
+    verify(ratingRepository, never()).save(any());
+  }
 
-    verify(ratingRepository).save(updatedRating);
+  @Test
+  void updateRatingOnNewTest() {
+    // Mocks a non-existent rating
+    when(ratingRepository
+        .findByRatingId_DuckIdAndRatingId_UserId(99, 99))
+        .thenReturn(Optional.empty());
 
     assertThrows(
         RuntimeException.class,
-        () -> ratingService.changeRating(new Rating(99, 99, false))
+        () -> ratingService.changeRating(new RatingRequest(99, 99, true))
     );
+
+    // Verify lookup happened, but no save
+    verify(ratingRepository).findByRatingId_DuckIdAndRatingId_UserId(99,99);
+    verify(ratingRepository, never()).save(any());
+  }
+
+  @Test
+  void updateRatingOnExistingTest() {
+    Rating rating = new Rating(1, 1, false);
+
+    // Mock an existing rating
+    when(ratingRepository
+        .findByRatingId_DuckIdAndRatingId_UserId(1, 1))
+        .thenReturn(Optional.of(rating));
+
+    // Mock saving an updated rating
+    when(ratingRepository.save(any(Rating.class)))
+        .thenAnswer(invocation -> invocation.getArgument(0));
+
+    // Check if result returned the updated value
+    RatingResponse result = ratingService.changeRating(new RatingRequest(1, 1, true));
+    assertTrue(result.isPositive());
+
+    // Verify check for already present rating
+    verify(ratingRepository)
+        .findByRatingId_DuckIdAndRatingId_UserId(1, 1);
+
+    // Verify it was saved
+    ArgumentCaptor<Rating> ratingCaptor = ArgumentCaptor.forClass(Rating.class);
+    verify(ratingRepository).save(ratingCaptor.capture());
+    assertTrue(ratingCaptor.getValue().isPositive());
+  }
+
+  @Test
+  void updateRatingOnNegativeIdTest() {
+    assertThrows(
+        RuntimeException.class,
+        () -> ratingService.changeRating(new RatingRequest(-1, 1, false))
+    );
+    assertThrows(
+        RuntimeException.class,
+        () -> ratingService.changeRating(new RatingRequest(1, -1, false))
+    );
+    verify(ratingRepository, never()).findByRatingId_DuckIdAndRatingId_UserId(anyInt(), anyInt());
+    verify(ratingRepository, never()).save(any());
   }
 
   // Feels useless/redundant, but ¯\_(ツ)_/¯

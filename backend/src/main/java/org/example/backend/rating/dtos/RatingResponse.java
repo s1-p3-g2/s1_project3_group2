@@ -6,6 +6,4 @@ public record RatingResponse(
     int userId,
     int duckId,
     boolean isPositive
-) {
-
-}
+) {}
