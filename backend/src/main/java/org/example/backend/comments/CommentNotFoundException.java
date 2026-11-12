@@ -1,0 +1,7 @@
+package org.example.backend.comments;
+
+public class CommentNotFoundException extends RuntimeException {
+    public CommentNotFoundException(Integer commentId) {
+        super("Comment " + commentId + " was not found");
+    }
+}
