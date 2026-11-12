@@ -4,7 +4,6 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="866bfccf-0442-4346-8490-271385e40380" name="Changes" comment="very very rough comment section tsx">
       <change afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/components/ui/comments-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/components/ui/comments-section.tsx" afterDir="false" />
