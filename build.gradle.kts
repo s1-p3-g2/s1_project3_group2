@@ -46,8 +46,20 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-junit-jupiter")
     testImplementation("org.testcontainers:testcontainers-postgresql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    runtimeOnly("com.h2database:h2")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+sourceSets {
+    main {
+        java.setSrcDirs(listOf("backend/src/main/java"))
+        resources.setSrcDirs(listOf("backend/src/main/resources"))
+    }
+
+    test {
+        java.setSrcDirs(listOf("backend/src/test/java"))
+        resources.setSrcDirs(listOf("backend/src/test/resources"))
+    }
 }
