@@ -16,11 +16,11 @@ info:
     name: Project 3, Team 02
     url: https://github.com/s1-p3-g2/s1_project3_group2
 
-#servers: TODO Finish this when implemented
-#  - url: http://localhost:8080
-#    description: Local (docker compose up)
-#  - url: https://your-api.example.com
-#    description: Production (replace in Sprint 3)
+servers:
+  - url: http://localhost:8080
+    description: Local (docker compose up)
+  - url: https://your-api.example.com
+    description: Production (replace in Sprint 3)
 
 # Every endpoint requires a Bearer token unless it overrides this with `security: []`.
 security:
@@ -170,7 +170,22 @@ paths:
           $ref: '#/components/responses/NotFound'
         '409':
           $ref: '#/components/responses/Conflict'
-          
+  /api/v1/ratings/rank/{duckId}:
+    get:
+      tags: [ Unregistered, Ducks, Ratings]
+      operationId: getDuckRanking
+      summary: Get rating score and ranking of a duck
+      description: Returns an object containing calculated duck ranking and duck rating score (positive ratings - negative ratings)
+      parameters:
+        - $ref: '#/components/parameters/DuckId'
+      responses:
+        '200':
+          description: Successfully found duck and its ranking information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DuckRanking'
+
   /api/v1/ratings/ducks/{duckId}:
     get:
       tags: [ Admin, Ducks, Ratings ]
@@ -267,7 +282,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RatingPatch'
+              $ref: '#/components/schemas/RatingRequest'
       responses:
         '200':
           description: Rating updated
@@ -550,14 +565,37 @@ components:
         page:
           $ref: '#/components/schemas/PageMeta'
 
-    RatingPatch:
+    RatingRequest:
       type: object
-      minProperties: 1
       properties:
+        userId:
+          type: integer
+          format: int64
+          example: 3
+        duckId:
+          type: integer
+          format: int64
+          example: 4
         isPositive:
           type: boolean
-          example: false
+          example: true
           description: Whether the user liked the duck or not.
+
+    DuckRanking:
+      type: object
+      properties:
+        duckId:
+          type: integer
+          format: int64
+          example: 4
+        score:
+          type: integer
+          format: int64
+          example: 2
+        position:
+          type: integer
+          format: int64
+          example: 3
 
     Comments:
       type: object
