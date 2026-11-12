@@ -1,10 +1,6 @@
-package org.example.backend.controller;
+package org.example.backend.duck;
 
 import java.util.Map;
-
-import org.example.backend.dto.PostDuckRequest;
-import org.example.backend.dto.PostDuckResponse;
-import org.example.backend.service.DuckService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;

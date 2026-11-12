@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.duck;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,10 +14,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Map;
-
-import org.example.backend.dto.PostDuckRequest;
-import org.example.backend.dto.PostDuckResponse;
-import org.example.backend.service.DuckService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataAccessException;
@@ -101,7 +97,7 @@ class DuckServiceTest {
 
         assertEquals(expected, actual);
         verify(jdbcTemplate).queryForObject(
-            eq("SELECT name, duck_id, description, image_link, score " +
+            eq("SELECT name, image_link, description, creator_id, duck_id " +
                 "FROM ducks WHERE duck_id = ?"),
             org.mockito.ArgumentMatchers.<RowMapper<PostDuckResponse>>any(),
             eq(42)
@@ -132,13 +128,14 @@ class DuckServiceTest {
         creator.getValue().createPreparedStatement(connection);
 
         verify(connection).prepareStatement(
-            "INSERT INTO ducks (name, description, image_link, rating_score) VALUES (?, ?, ?, ?)",
+            "INSERT INTO ducks (name, description, image_link, creator_id, rating_score) VALUES (?, ?, ?, ?, ?)",
             java.sql.Statement.RETURN_GENERATED_KEYS
         );
         verify(statement).setString(1, "Mallard");
         verify(statement).setString(2, "A mallard");
         verify(statement).setString(3, "duck.png");
-        verify(statement).setInt(4, 0);
+        verify(statement).setInt(4, 1);
+        verify(statement).setInt(5, 0);
     }
 
     @Test
