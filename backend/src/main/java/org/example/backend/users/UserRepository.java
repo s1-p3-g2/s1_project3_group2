@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * @author Victoria Ha
  * @version 0.1.0
- * Description: this needs UserModelling but im just too..
+ * Description: this may need fixing down th line but
  * @since 11/9/2026
  */
 
