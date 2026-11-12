@@ -17,15 +17,15 @@ public class Rating {
   @EmbeddedId
   private RatingId ratingId;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @MapsId("userId")
-  @JoinColumn(name="user_id", nullable = false)
-  private User user;
+  // @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  // @MapsId("userId")
+  // @JoinColumn(name="user_id", nullable = false)
+  // private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @MapsId("duckId")
-  @JoinColumn(name="duck_id", nullable = false)
-  private Duck duck;
+  // @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  // @MapsId("duckId")
+  // @JoinColumn(name="duck_id", nullable = false)
+  // private Duck duck;
 
   @Column(name = "isPositive", nullable = false)
   private boolean isPositive;
