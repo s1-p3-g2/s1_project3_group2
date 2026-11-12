@@ -1,17 +1,42 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
-type CommentSectionProps = {
-    name: string;
-    comment: string;
-    };
+type Comment = {
+  id: number;
+  authorId: number;
+  authorName: string;
+  text: string;
+  createdAt: string;
+};
 
-export function CommentPage({
+type CommentsSectionProps = {
+  comments: Comment[];
+};
 
-}: CommentSectionProps) {
-        return (
-            <View style={styles.card}>
-        <Text style={styles.name}>{name}</Text>
-        <Text>{comment}</Text>
-       </View>
-        );
-    }
+export function CommentsSection({ comments }: CommentsSectionProps) {
+  return (
+    <View style={styles.section}>
+      <Text style={styles.heading}>Comments</Text>
+
+      <FlatList
+        data={comments}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => (
+          <View style={styles.comment}>
+            <Text style={styles.author}>{item.authorName}</Text>
+            <Text>{item.text}</Text>
+            <Text style={styles.date}>{item.createdAt}</Text>
+          </View>
+        )}
+        ListEmptyComponent={<Text>No comments yet.</Text>}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  section: { gap: 12 },
+  heading: { fontSize: 20, fontWeight: 'bold' },
+  comment: { padding: 12, gap: 6, borderBottomWidth: StyleSheet.hairlineWidth },
+  author: { fontWeight: 'bold' },
+  date: { fontSize: 12, color: '#666' },
+});
