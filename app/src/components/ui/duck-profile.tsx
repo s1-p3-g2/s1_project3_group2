@@ -26,6 +26,7 @@ export function DuckProfile({
         contentFit="cover"
         accessibilityLabel={`${name}, rubber duck`}
       />
+      <Text>"Duck Profile"</Text>
       <Text style={styles.name}>{name}</Text>
       <Text>{description}</Text>
       <Text>Rating: {ratingScore}</Text>
