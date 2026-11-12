@@ -1,5 +1,6 @@
 package org.example.backend.rating;
 
+import org.example.backend.rating.dtos.RatingRequest;
 import org.example.backend.rating.dtos.RatingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,35 +12,36 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RestController;
 
 // TODO: Make sure this lines up with openapi.yml
 
+@RestController
 @RequestMapping("api/v1/ratings")
 public class RatingController {
-  private RatingService ratingService;
+  private final RatingService ratingService;
 
-  // TODO: Implement this
+  public RatingController(RatingService ratingService) {
+    this.ratingService = ratingService;
+  }
+
   @GetMapping
   public Page<RatingResponse> getRatings(Pageable pageable) {
     return ratingService.getRatings(pageable);
   }
 
-  // TODO: Implement this
   @PostMapping
-  public RatingResponse createRating(@RequestBody Rating rating) {
-    return ratingService.createRating(rating);
+  public RatingResponse createRating(@RequestBody RatingRequest request) {
+    return ratingService.createRating(request);
   }
 
   // Uses request body to update rating, should include user_id, duck_id, and isPositive
   // No need for patch, all fields are required to edit a rating
-  // TODO: Implement this
   @PutMapping
-  public RatingResponse updateRating(@RequestBody Rating rating) {
-    return ratingService.changeRating(rating);
+  public RatingResponse updateRating(@RequestBody RatingRequest request) {
+    return ratingService.changeRating(request);
   }
 
-  // TODO: Implement this
   @DeleteMapping("/ducks/{duckId}/users/{userId}")
   public void deleteRating(@PathVariable int duckId, @PathVariable int userId) {
     ratingService.deleteRating(userId, duckId);
@@ -50,50 +52,39 @@ public class RatingController {
     return ratingService.getRatingsByDuck(duckId, pageable);
   }
 
-  // TODO: Implement this
   @GetMapping("/users/{userId}")
   public Page<RatingResponse> getRatingsByUser(@PathVariable int userId, Pageable pageable) {
     return ratingService.getRatingsByUser(userId, pageable);
   }
 
-  // TODO: Implement this
   @GetMapping("/ducks/{duckId}/users/{userId}")
   public RatingResponse getRating(@PathVariable int duckId, @PathVariable int userId) {
     return ratingService.getRating(userId, duckId);
   }
 
-  // TODO: Implement this
-  // TODO: Think about request body more, use DTO or no
   @GetMapping("/me/{duckId}")
   public RatingResponse getMyRating(@PathVariable int duckId, Authentication auth) {
     return ratingService.getMyRating(duckId, auth);
   }
 
-  // TODO: Implement this
-  // TODO: Think about request body more, use DTO or no
+  // TODO: Revisit when oauth is implemented
   @GetMapping("/me")
   public Page<RatingResponse> getMyRatings(Authentication auth, Pageable pageable) {
     return ratingService.getMyRatings(auth, pageable);
   }
 
-  // TODO: Implement this
-  // TODO: Think about request body more, use DTO or no
   // TODO: Revisit when oauth is implemented
   @PostMapping("/me/{duckId}")
   public RatingResponse makeMyRating(@PathVariable int duckId, @RequestBody boolean isPositive, Authentication auth) {
     return ratingService.makeMyRating(duckId, auth, isPositive);
   }
 
-  // TODO: Implement this
-  // TODO: Think about request body more, use DTO or no
   // TODO: Revisit when oauth is implemented
   @DeleteMapping("/me/{duckId}")
   public void deleteMyRating(@PathVariable int duckId, Authentication auth) {
     ratingService.deleteMyRating(duckId, auth);
   }
 
-  // TODO: Implement this
-  // TODO: Think about request body more, use DTO or no
   // TODO: Revisit when oauth is implemented
   @PutMapping("/me/{duckId}")
   public RatingResponse changeMyRating(@PathVariable int duckId, @RequestBody boolean isPositive, Authentication auth) {

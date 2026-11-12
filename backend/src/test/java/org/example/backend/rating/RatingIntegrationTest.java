@@ -1,123 +1,108 @@
-package java.org.example.backend.rating;
+package org.example.backend.rating;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+@Testcontainers
 @SpringBootTest
-@AutoConfigureMockMvc
-public class RatingIntegrationTest {
+@AutoConfigureMockMvc(addFilters = false)
+class RatingIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Container
+  @ServiceConnection
+  static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:16-alpine")
+      .withDatabaseName("ratemyduck")
+      .withUsername("test")
+      .withPassword("test");
 
-    @Test
-    public void getRatingTest() throws Exception {
-        // Arrange
-        int userId = 1;
-        int duckId = 1;
+  @Autowired
+  private MockMvc mockMvc;
 
-        // Act
-        ResultActions result = mockMvc.perform(get("/api/v1/ratings/ducks/{duckId}/users/{userId}", duckId, userId));
+  @Autowired
+  private RatingRepository ratingRepository;
 
-        // Assert
-        result.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.userId").value(userId))
-                .andExpect(jsonPath("$.duckId").value(duckId))
-                .andExpect(jsonPath("$.isPositive").value(false))
-        ;
-    }
+  @BeforeEach
+  void resetRatings() {
+    ratingRepository.deleteAll();
+  }
 
-    // TODO: finish getRatingsTest, address pages
-    @Test
-    public void getRatingsTest() throws Exception {
-        // Act
-        ResultActions result = mockMvc.perform(get("/api/v1/ratings"));
+  @Test
+  void httpRatingCreateTest() throws Exception {
+    mockMvc.perform(post("/api/v1/ratings")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"userId\":101,\"duckId\":202,\"isPositive\":false}"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.userId").value(101))
+        .andExpect(jsonPath("$.duckId").value(202))
+        .andExpect(jsonPath("$.isPositive").value(false));
+  }
 
-        // Assert
-        result.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
+  @Test
+  void httpRatingUpdateTest() throws Exception {
+    ratingRepository.save(new Rating(101, 202, false));
 
-    @Test
-    public void getRatingsByUserIdTest() throws Exception {
-        // Arrange
-        int userId = 1;
+    mockMvc.perform(put("/api/v1/ratings")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"userId\":101,\"duckId\":202,\"isPositive\":true}"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.isPositive").value(true));
+  }
 
-        // Act
-        ResultActions result = mockMvc.perform(get("/api/v1/ratings/users/{userId}", userId));
+  @Test
+  void httpRatingGetTest() throws Exception {
+    ratingRepository.save(new Rating(101, 202, false));
 
-        // Assert
-        result.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
+    mockMvc.perform(get("/api/v1/ratings/ducks/202/users/101"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.isPositive").value(false));
 
-    @Test
-    public void getRatingsByDuckIdTest() throws Exception {
-        // Arrange
-        int duckId = 1;
+    mockMvc.perform(get("/api/v1/ratings/users/101"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.totalElements").value(1))
+        .andExpect(jsonPath("$.content[0].duckId").value(202));
 
-        // Act
-        ResultActions result = mockMvc.perform(get("/api/v1/ratings/ducks/{duckId}", duckId));
+    mockMvc.perform(get("/api/v1/ratings/ducks/202"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.totalElements").value(1));
+  }
 
-        // Assert
-        result.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
+  @Test
+  void httpRatingDeleteTest() throws Exception {
+    ratingRepository.save(new Rating(101, 202, false));
+    mockMvc.perform(delete("/api/v1/ratings/ducks/202/users/101"))
+        .andExpect(status().isOk());
 
-    @Test
-    public void createRatingTest() throws Exception {
-        // Arrange
-        String ratingJson = "{\"userId\":\"1\",\"duckId\":\"1\",\"isPositive\":false}";
+    assertTrue(ratingRepository.findByRatingId_DuckIdAndRatingId_UserId(202, 101).isEmpty());
+  }
 
-        // Act
-        ResultActions result = mockMvc.perform(post("/api/v1/ratings")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(ratingJson));
+  @Test
+  void ratingsCollectionReturnsSpringPageShape() throws Exception {
+    ratingRepository.save(new Rating(301, 401, true));
 
-        // Assert
-        result.andExpect(status().isCreated())
-                .andExpect(header().string("Location", "http://localhost/api/v1/ratings/ducks/1/users/1"));
-
-    }
-
-    @Test
-    public void updateRatingTest() throws Exception {
-        // Arrange
-        int userId = 1;
-        int duckId = 1;
-        String updatedRatingJson = "{\"userId\":\"1\",\"duckId\":\"1\",\"isPositive\":true}";
-
-        // Act
-        ResultActions result = mockMvc.perform(put("/api/v1/ratings/ducks/{duckId}/users/{userId}", duckId, userId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(updatedRatingJson));
-
-        // Assert
-        result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value(userId))
-                .andExpect(jsonPath("$.duckId").value(duckId))
-                .andExpect(jsonPath("$.isPositive").value(true));
-    }
-
-    @Test
-    public void deleteRatingTest() throws Exception {
-        // Arrange
-        int userId = 1;
-        int duckId = 1;
-
-        // Act
-        ResultActions result = mockMvc.perform(delete("/api/v1/ratings/ducks/{duckId}/users/{userId}", duckId, userId));
-
-        // Assert
-        result.andExpect(status().isOk());
-    }
+    mockMvc.perform(get("/api/v1/ratings"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.content").isArray())
+        .andExpect(jsonPath("$.totalElements").value(1))
+        .andExpect(jsonPath("$.content[0].userId").value(301));
+  }
 }
