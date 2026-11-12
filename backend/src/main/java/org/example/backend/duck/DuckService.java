@@ -1,10 +1,7 @@
-package org.example.backend.service;
+package org.example.backend.duck;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-
-import org.example.backend.dto.PostDuckRequest;
-import org.example.backend.dto.PostDuckResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -29,7 +26,7 @@ public class DuckService {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO ducks (name, description, image_link, creator_id, rating_score) VALUES (?, ?, ?, ?)",
+                "INSERT INTO ducks (name, description, image_link, creator_id, rating_score) VALUES (?, ?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
             );
             statement.setString(1, pdr.name());
@@ -46,7 +43,7 @@ public class DuckService {
         }
 
         return jdbcTemplate.queryForObject(
-            "SELECT name, description, image_link, creator_id, duck_id" +
+            "SELECT name, image_link, description, creator_id, duck_id " +
                 "FROM ducks WHERE duck_id = ?",
             (rs, rowNum) -> new PostDuckResponse(
                 rs.getString("name"),
