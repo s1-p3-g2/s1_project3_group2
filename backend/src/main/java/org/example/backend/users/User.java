@@ -1,93 +1,103 @@
 package org.example.backend.users;
 
 import jakarta.persistence.*;
+
 /**
  * @author Victoria Ha
- * @version 0.1.0
- * Description: This is the Model class
+ * @version 0.1.0 Description: This is the Model class
  * @since 11/9/2026
  */
 
+  /*
+  PMD WARNING: AvoidFieldNameMatchingMethodName ️
+    https://docs.pmd-code.org/pmd-doc-7.24.0/pmd_rules_java_errorprone.html#avoidfieldnamematchingmethodname
+    Doesn't like User.isAdmin(), idc
+  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 @Entity
 @Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private long user_id;
-    @Column(nullable = false, length = 100)
-    private String username;
-    @Column(nullable = false, length = 10)
-    private String provider;
-    @Column(name = "provider_user_id", nullable = false, length = 255)//oh my fucking god. there was a semicolon here and nobody yelled at me for it
-    private String authSub;
-    @Column(length = 250)
-    private String bio;
-    @Column(name = "profile_pic", columnDefinition = "TEXT")
-    private String profilePic;
-    @Column(name = "is_admin", nullable = false)
-    private boolean isAdmin;
 
-    protected User(String username, String provider, String authSub, String bio, String profilePic) {
-        this.username = username;
-        this.provider = provider;
-        this.authSub = authSub;
-        this.bio = bio;
-        this.profilePic = profilePic;
-        this.isAdmin = false;
-    }
-    protected User() {
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_id")
+  private long user_id;
+  @Column(nullable = false, length = 100)
+  private String username;
+  @Column(nullable = false, length = 10)
+  private String provider;
+  @Column(name = "provider_user_id", nullable = false, length = 255)
+//oh my fucking god. there was a semicolon here and nobody yelled at me for it
+  private String authSub;
+  @Column(length = 250)
+  private String bio;
+  @Column(name = "profile_pic", columnDefinition = "TEXT")
+  private String profilePic;
+  @Column(name = "is_admin", nullable = false)
+  private boolean isAdmin;
 
-    public long getUserId() {
-        return user_id;
-    }
+  protected User(String username, String provider, String authSub, String bio, String profilePic) {
+    this.username = username;
+    this.provider = provider;
+    this.authSub = authSub;
+    this.bio = bio;
+    this.profilePic = profilePic;
+    this.isAdmin = false;
+  }
 
-    public String getAuthSub() {
-        return authSub;
-    }
-    public String getBio() {
-        return bio;
-    }
+  protected User() {
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public long getUserId() {
+    return user_id;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getAuthSub() {
+    return authSub;
+  }
 
-    public String getProvider() {
-        return provider;
-    }
+  public String getBio() {
+    return bio;
+  }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public void setAuthSub(String authSub) {
-        this.authSub = authSub;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
+  public String getProvider() {
+    return provider;
+  }
 
-    public String getProfilePic() {
-        return profilePic;
-    }
+  public void setProvider(String provider) {
+    this.provider = provider;
+  }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
-    }
+  public void setAuthSub(String authSub) {
+    this.authSub = authSub;
+  }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
+  public void setBio(String bio) {
+    this.bio = bio;
+  }
 
-    //package private just so that other files can't call it willy nilly
-    void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
+  public String getProfilePic() {
+    return profilePic;
+  }
+
+  public void setProfilePic(String profilePic) {
+    this.profilePic = profilePic;
+  }
+
+  public boolean isAdmin() {
+    return isAdmin;
+  }
+
+  //package private just so that other files can't call it willy nilly
+  void setAdmin(boolean admin) {
+    isAdmin = admin;
+  }
 }
