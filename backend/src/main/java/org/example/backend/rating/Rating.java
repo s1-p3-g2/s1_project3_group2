@@ -7,6 +7,12 @@ import jakarta.persistence.Table;
 import java.util.Objects;
 import org.example.backend.duck.Duck;
 
+/*
+PMD WARNING: AvoidFieldNameMatchingMethodName ️
+  https://docs.pmd-code.org/pmd-doc-7.24.0/pmd_rules_java_errorprone.html#avoidfieldnamematchingmethodname
+  Doesn't like Rating.isPostive(), idc
+*/
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 @Entity
 @Table(name = "ratings")
 public class Rating {
@@ -26,7 +32,6 @@ public class Rating {
 
   @Column(name = "isPositive", nullable = false)
   private boolean isPositive;
-
 
   /**
    * TODO: Revisit this once ducks and users are fully implemented

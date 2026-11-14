@@ -218,7 +218,7 @@ public class RatingService {
         new RuntimeException("getDuckRanking: Unknown repository error during getDuckRank")
     );
 
-    if (position < 1) {
+    if (position <= 0) {
       throw new RuntimeException("getDuckRanking: Invalid Rank obtained from getDuckRank");
     }
 
