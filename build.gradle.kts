@@ -1,8 +1,12 @@
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
+
 plugins {
     java
     id("org.springframework.boot") version "4.1.2"
     id("io.spring.dependency-management") version "1.1.7"
     pmd
+    id("com.github.spotbugs") version "6.5.13"
 }
 
 group = "org.example"
@@ -48,6 +52,9 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-postgresql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     runtimeOnly("com.h2database:h2")
+
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
+    spotbugs("com.github.spotbugs:spotbugs:4.9.3")
 }
 
 tasks.withType<Test> {
@@ -68,4 +75,31 @@ sourceSets {
 pmd {
     ruleSetFiles = files("config/pmd/ruleset.xml")
     isIgnoreFailures = false
+}
+
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = Effort.DEFAULT
+    reportLevel = Confidence.DEFAULT
+    visitors = listOf("FindSqlInjection", "SwitchFallthrough")
+    omitVisitors = listOf("FindNonShortCircuit")
+    chooseVisitors = listOf("-FindNonShortCircuit", "+TestASM")
+    reportsDir = file("$buildDir/spotbugs")
+//    includeFilter = file("config/spotbugs/include.xml")
+//    excludeFilter = file("config/spotbugs/exclude.xml")
+//    baselineFile = file("config/spotbugs/baseline.xml")
+//    onlyAnalyze = listOf("com.foobar.MyClass", "com.foobar.mypkg.*")
+    maxHeapSize = "1g"
+    extraArgs = listOf("-nested:false")
+    jvmArgs = listOf("-Duser.language=ja")
+}
+
+tasks.spotbugsMain {
+    reports.create("html") {
+        required = true
+        outputLocation = file("$buildDir/reports/spotbugs.html")
+        setStylesheet("fancy-hist.xsl")
+    }
 }
