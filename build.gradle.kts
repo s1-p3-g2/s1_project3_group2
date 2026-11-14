@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "4.1.2"
     id("io.spring.dependency-management") version "1.1.7"
+    pmd
 }
 
 group = "org.example"
@@ -62,4 +63,9 @@ sourceSets {
         java.setSrcDirs(listOf("backend/src/test/java"))
         resources.setSrcDirs(listOf("backend/src/test/resources"))
     }
+}
+
+pmd {
+    ruleSetFiles = files("config/pmd/ruleset.xml")
+    isIgnoreFailures = false
 }
