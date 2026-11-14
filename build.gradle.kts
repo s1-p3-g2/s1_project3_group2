@@ -7,6 +7,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     pmd
     id("com.github.spotbugs") version "6.5.13"
+    checkstyle
 }
 
 group = "org.example"
@@ -53,8 +54,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     runtimeOnly("com.h2database:h2")
 
-    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
     spotbugs("com.github.spotbugs:spotbugs:4.9.3")
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
 }
 
 tasks.withType<Test> {
@@ -95,11 +96,29 @@ spotbugs {
     extraArgs = listOf("-nested:false")
     jvmArgs = listOf("-Duser.language=ja")
 }
-
+// Sets the main Gradle task to create a report
 tasks.spotbugsMain {
     reports.create("html") {
         required = true
         outputLocation = file("$buildDir/reports/spotbugs.html")
         setStylesheet("fancy-hist.xsl")
+    }
+}
+
+checkstyle {
+    toolVersion = "10.24.0"
+
+    // Pulls built-in java checkstyle config
+    val checkstyleJar = configurations.checkstyle.map { cfg ->
+        cfg.filter { it.name.startsWith("checkstyle-") }
+    }
+    config = resources.text.fromArchiveEntry(checkstyleJar, "google_checks.xml")
+}
+// Sets the main Gradle task to create a report
+tasks.withType<Checkstyle>().configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+        html.stylesheet = resources.text.fromFile("config/xsl/checkstyle-simple.xsl")
     }
 }
