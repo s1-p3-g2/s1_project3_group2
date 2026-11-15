@@ -9,7 +9,7 @@ plugins {
     pmd                                               // Java Static Analysis
     id("com.github.spotbugs") version "6.5.13"        // Java Static Analysis
     checkstyle                                        // Java Static Analysis
-z    id("com.github.node-gradle.node") version "7.1.0" // Typescript/Javascript Static Analysis
+    id("com.github.node-gradle.node") version "7.1.0" // Typescript/Javascript Static Analysis
 }
 
 group = "org.example"
