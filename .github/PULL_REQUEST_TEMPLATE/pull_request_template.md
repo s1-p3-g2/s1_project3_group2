@@ -1,11 +1,11 @@
 
-Closes #<issue number>
+Closes/Addresses #<issue number>
 
 ## What changed
 
 ## How I tested it
 - [ ] Unit tests pass locally
-    - [ ] 'gradlew test'
+- [ ] 'gradlew test'
 - [ ] If the API contract changed, `docs/openapi.yaml` is updated and lints clean (`npx @redocly/cli lint docs/openapi.yaml`)
 
 ## Reviewers
