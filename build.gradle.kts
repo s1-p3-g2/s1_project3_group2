@@ -1,3 +1,4 @@
+//import com.github.gradle.node.npm.task.NpmTask
 import com.github.spotbugs.snom.Confidence
 import com.github.spotbugs.snom.Effort
 
@@ -5,9 +6,10 @@ plugins {
     java
     id("org.springframework.boot") version "4.1.2"
     id("io.spring.dependency-management") version "1.1.7"
-    pmd
-    id("com.github.spotbugs") version "6.5.13"
-    checkstyle
+    pmd                                               // Java Static Analysis
+    id("com.github.spotbugs") version "6.5.13"        // Java Static Analysis
+    checkstyle                                        // Java Static Analysis
+//    id("com.github.node-gradle.node") version "7.1.0" // Typescript/Javascript Static Analysis
 }
 
 group = "org.example"
@@ -119,3 +121,22 @@ tasks.withType<Checkstyle>().configureEach {
         html.stylesheet = resources.text.fromFile("config/xsl/checkstyle-simple.xsl")
     }
 }
+
+// Trying to do static analysis with node was problematic
+// It 10x-ed the amount of time it took to build, the gradle task took around ~5 minutes alone
+//node {
+//    nodeProjectDir = file("app")
+//    version.set("22.13.0")
+//    download.set(true)
+//}
+//
+//tasks.register<NpmTask>("npmTest") {
+//    dependsOn("npmInstall")
+//    args.set(listOf("run", "lint"))
+//
+//    // Enable Gradle caching by declaring inputs and outputs
+//    inputs.dir("app/src")
+//    inputs.file("app/package.json")
+//    inputs.file("app/package-lock.json")
+//    outputs.upToDateWhen { true }
+//}
