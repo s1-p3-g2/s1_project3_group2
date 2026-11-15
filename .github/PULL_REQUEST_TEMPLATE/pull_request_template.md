@@ -1,3 +1,10 @@
+---
+name: Pull Request
+about: Pull Requests
+title: "Pull Request: <title describing contents of PR"
+labels: pull-request
+---
+
 Closes #
 
 ## What changed

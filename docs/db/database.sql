@@ -71,6 +71,6 @@ CREATE INDEX ratings_user_id_index ON ratings USING btree (user_id); -- Composit
 
 -- Comment Indices
 CREATE INDEX comments_user_id_index ON comments USING btree (user_id);
-CREATE INDEX comments_user_id_index ON comments USING btree (duck_id);
+CREATE INDEX comments_duck_id_index ON comments USING btree (duck_id);
 
 COMMIT;
