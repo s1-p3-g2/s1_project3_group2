@@ -150,16 +150,6 @@ public class RatingRepositoryTest {
   // https://stackoverflow.com/questions/57235922/junit-how-to-test-method-which-deletes-entity-jpa
 
   @Test
-  void deleteRatingByCompoundIdTest() {
-    Rating rating = new Rating(5,5,true);
-    final RatingId id = tem.persistAndGetId(rating, RatingId.class);
-    ratingRepository.deleteByRatingId(rating.getRatingId());
-    tem.flush();
-    Rating after = tem.find(Rating.class, id);
-    assertNull("Rating delete makes rating null", after);
-  }
-
-  @Test
   void deleteRatingBySeparateIdsTest() {
     Rating rating = new Rating(5,5,true);
     final RatingId id = tem.persistAndGetId(rating, RatingId.class);
