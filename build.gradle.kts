@@ -109,10 +109,7 @@ checkstyle {
     toolVersion = "10.24.0"
 
     // Pulls built-in java checkstyle config
-    val checkstyleJar = configurations.checkstyle.map { cfg ->
-        cfg.filter { it.name.startsWith("checkstyle-") }
-    }
-    config = resources.text.fromArchiveEntry(checkstyleJar, "google_checks.xml")
+    configFile = file("config/checkstyle/google_checks.xml")
 }
 // Sets the main Gradle task to create a report
 tasks.withType<Checkstyle>().configureEach {
