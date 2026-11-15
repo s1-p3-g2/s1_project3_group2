@@ -1,5 +1,5 @@
 
-Closes/Addresses #<issue number>
+Closes #
 
 ## What changed
 
