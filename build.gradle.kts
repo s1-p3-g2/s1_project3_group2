@@ -9,7 +9,7 @@ plugins {
     pmd                                               // Java Static Analysis
     id("com.github.spotbugs") version "6.5.13"        // Java Static Analysis
     checkstyle                                        // Java Static Analysis
-//    id("com.github.node-gradle.node") version "7.1.0" // Typescript/Javascript Static Analysis
+z    id("com.github.node-gradle.node") version "7.1.0" // Typescript/Javascript Static Analysis
 }
 
 group = "org.example"
@@ -123,11 +123,27 @@ tasks.withType<Checkstyle>().configureEach {
     }
 }
 
+val openapiLint = tasks.register<Exec>("openapiLint") {
+    description = "Lints the OpenAPI contract with Redocly."
+    group = "verification"
+
+    val npxCommand = if (System.getProperty("os.name").lowercase().contains("windows")) {
+        "npx.cmd"
+    } else {
+        "npx"
+    }
+
+    inputs.file("docs/openapi.yaml")
+    commandLine(npxCommand, "--yes", "@redocly/cli", "lint", "docs/openapi.yaml")
+}
+
 tasks.named("check") {
     dependsOn(tasks.pmdMain)
     dependsOn(tasks.spotbugsMain)
     dependsOn(tasks.checkstyleMain)
+    dependsOn(openapiLint)
 }
+
 
 // Trying to do static analysis with node was problematic
 // It 10x-ed the amount of time it took to build, the gradle task took around ~5 minutes alone
