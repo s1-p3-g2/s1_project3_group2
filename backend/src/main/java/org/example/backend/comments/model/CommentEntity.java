@@ -6,13 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.apache.logging.log4j.internal.annotation.SuppressFBWarnings;
 
-/*
-   PMD WARNING: AvoidFieldNameMatchingMethodName ️
-     https://docs.pmd-code.org/pmd-doc-7.24.0/pmd_rules_java_errorprone.html#avoidfieldnamematchingmethodname
-     Doesn't like CommentEntity.Id() method, idc
-  */
-@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
@@ -64,6 +59,13 @@ public class CommentEntity {
    SPOTBUGS WARNING: NM_METHOD_NAMING_CONVENTION
      https://docs.pmd-code.org/pmd-doc-7.24.0/pmd_rules_java_errorprone.html#avoidfieldnamematchingmethodname
      Doesn't like CommentEntity.Id() method, changed method to not start with a capital letter
+  */
+  /*
+   PMD WARNING: AvoidFieldNameMatchingMethodName ️
+     https://docs.pmd-code.org/pmd-doc-7.24.0/pmd_rules_java_errorprone.html#avoidfieldnamematchingmethodname
+     Doesn't like CommentEntity.Id() method
+   spotbugs WARNING: NM_METHOD_NAMING_CONVENTION
+     doesnt like method Id()
   */
   public Integer Id() {
     return duckId;
