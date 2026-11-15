@@ -58,6 +58,7 @@ dependencies {
 
     spotbugs("com.github.spotbugs:spotbugs:4.9.3")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.3")
 }
 
 tasks.withType<Test> {
@@ -120,6 +121,12 @@ tasks.withType<Checkstyle>().configureEach {
         html.required = true
         html.stylesheet = resources.text.fromFile("config/xsl/checkstyle-simple.xsl")
     }
+}
+
+tasks.named("check") {
+    dependsOn(tasks.pmdMain)
+    dependsOn(tasks.spotbugsMain)
+    dependsOn(tasks.checkstyleMain)
 }
 
 // Trying to do static analysis with node was problematic
