@@ -1,3 +1,7 @@
+#added by Victoria H. 11/16/2026 12:18p
+# basically it tells github to run version update checks for all gradle
+# dependencies and makes a pr for new versions and patches. only 3 can
+# exist at a time.
 version: 2
 updates:
   - package-ecosystem: "gradle"
