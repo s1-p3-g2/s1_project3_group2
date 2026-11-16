@@ -9,3 +9,9 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+#this bit..checks versions of reusable actions referenced by other workflows.. this adds another 3 limit so it's 3 total.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
