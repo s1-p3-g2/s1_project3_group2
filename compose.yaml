@@ -4,6 +4,7 @@ services:
     container_name: rate_duck
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
-      SUPABASE_DB_URL: ${DATABASE_URL}
       SERVER_PORT: 8080
