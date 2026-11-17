@@ -33,7 +33,7 @@ CREATE TABLE ducks
     image_link   TEXT,
     description  TEXT,
     creator_id   INT REFERENCES users (user_id) ON DELETE SET NULL,
-    rating_score INT,
+    rating_score INT
 );
 COMMENT ON COLUMN ducks.rating_score is 'Updated with every rating';
 
@@ -60,7 +60,6 @@ BEGIN;
 -- Duck Indices
 CREATE INDEX ducks_name_index ON ducks USING btree (name);
 CREATE INDEX ducks_creator_id_index ON ducks USING btree (creator_id);
-CREATE INDEX ducks_position_index ON ducks USING btree (position);
 CREATE INDEX ducks_rating_index ON ducks USING btree (rating_score);
 
 -- User Indices
