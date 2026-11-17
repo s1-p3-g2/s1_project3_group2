@@ -30,6 +30,9 @@ export default function LoginScreen() {
                 </Text>
             </View>
 
+            {/*AN: button is label, color and pressfeedback. title is label, onPress runs the code in the not-lambda
+                    Pressable on the other hand, handles clicks and taps nested text is the label. its more customisable than button like it has spacing shape and colors. accessibilityRole tells assistive tech this acts as a button.*/}
+
             <View style={styles.buttons}>
                 <Pressable
                     accessibilityRole="button"
@@ -59,6 +62,7 @@ export default function LoginScreen() {
     );
 }
 
+//this is the stylesheet it basically has a bunch of cosmetics for the login screen.
 const styles = StyleSheet.create({
     container: {
         flex: 1,
