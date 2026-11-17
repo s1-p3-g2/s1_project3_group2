@@ -9,7 +9,6 @@ package org.example.backend;
 import java.util.List;
 
 import org.example.backend.users.UserService;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -36,14 +35,36 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable()) // TODO: temporary, bypasses oauth to test ratings
-                .cors(cors -> {})
+                .cors(cors -> {
+                })
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
-                        .requestMatchers(HttpMethod.GET, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
-                        .requestMatchers(HttpMethod.POST, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
+                        .requestMatchers("/api/v1/ratings/me/**").authenticated()
                         .requestMatchers("/api/me").authenticated()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/v1/ratings",
+                                "/api/v1/ratings/**"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/v1/ratings",
+                                "/api/v1/ratings/**"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/v1/ratings",
+                                "/api/v1/ratings/**"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/v1/ratings",
+                                "/api/v1/ratings/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
@@ -85,24 +106,24 @@ public class SecurityConfig {
                         })
                 );
 
-    return http.build();
-  }
+        return http.build();
+    }
 
-  // Need cors config for expo apparently
-  @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
+    // Need cors config for expo apparently
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
 
-    // Just allow everything, maybe do better config later
-    config.setAllowedOriginPatterns(List.of("*"));
-    config.setAllowedMethods(List.of("*"));
-    config.setAllowedHeaders(List.of("*"));
-    config.setAllowCredentials(false);
+        // Just allow everything, maybe do better config later
+        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(false);
 
-    UrlBasedCorsConfigurationSource source =
-        new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-    source.registerCorsConfiguration("/**", config);
-    return source;
-  }
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
 }
