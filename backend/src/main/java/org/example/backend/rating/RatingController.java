@@ -44,7 +44,12 @@ public class RatingController {
   }
 
   @DeleteMapping("/ducks/{duckId}/users/{userId}")
-  public void deleteRating(@PathVariable int duckId, @PathVariable int userId) {
+  public void deleteRating1(@PathVariable int duckId, @PathVariable int userId) {
+    ratingService.deleteRating(userId, duckId);
+  }
+
+  @DeleteMapping("/users/{userId}/ducks/{duckId}")
+  public void deleteRating2(@PathVariable int duckId, @PathVariable int userId) {
     ratingService.deleteRating(userId, duckId);
   }
 
@@ -59,7 +64,12 @@ public class RatingController {
   }
 
   @GetMapping("/ducks/{duckId}/users/{userId}")
-  public RatingResponse getRating(@PathVariable int duckId, @PathVariable int userId) {
+  public RatingResponse getRating1(@PathVariable int duckId, @PathVariable int userId) {
+    return ratingService.getRating(userId, duckId);
+  }
+
+  @GetMapping("/users/{userId}/ducks/{duckId}")
+  public RatingResponse getRating2(@PathVariable int duckId, @PathVariable int userId) {
     return ratingService.getRating(userId, duckId);
   }
 

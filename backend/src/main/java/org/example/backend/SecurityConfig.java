@@ -23,6 +23,7 @@ public class SecurityConfig {
         )
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/ratings").permitAll() // TODO: temporary, bypasses oauth to test ratings
             .requestMatchers(HttpMethod.GET, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
             .requestMatchers(HttpMethod.POST, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
             .requestMatchers(HttpMethod.PUT, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
