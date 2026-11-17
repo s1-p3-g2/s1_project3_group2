@@ -1,10 +1,13 @@
-import { ScrollView, StyleSheet } from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import {ThemedText} from "@/components/themed-text";
 import {ThemedView} from "@/components/themed-view";
-import ViewRatingsModule from "@/components/ratings/viewRatings";
-import CreateRatingsModule from "@/components/ratings/createRatings";
 import {MaxContentWidth} from "@/constants/theme";
-import UpdateRatingsModule from "@/components/ratings/updateRatings";
+import ViewRatingsModule from "@/components/ratings/ViewRatings";
+import CreateRatingsModule from "@/components/ratings/CreateRatings";
+import UpdateRatingsModule from "@/components/ratings/UpdateRatings";
+import ViewRatingModule from "@/components/ratings/ViewSpecificRating";
+import ViewDuckRatingsModule from "@/components/ratings/ViewDuckRatings";
+import ViewUserRatingsModule from "@/components/ratings/ViewUserRatings";
 
 export default function RatingsScreen() {
   return (
@@ -19,14 +22,23 @@ export default function RatingsScreen() {
 
         <ThemedView style={styles.grid}>
           <ThemedView style={styles.card}>
-            <ViewRatingsModule />
+            <ViewRatingsModule/>
           </ThemedView>
 
           <ThemedView style={styles.card}>
-            <CreateRatingsModule />
+            <CreateRatingsModule/>
           </ThemedView>
           <ThemedView style={styles.card}>
-            <UpdateRatingsModule />
+            <UpdateRatingsModule/>
+          </ThemedView>
+          <ThemedView style={styles.card}>
+            <ViewRatingModule/>
+          </ThemedView>
+          <ThemedView style={styles.card}>
+            <ViewDuckRatingsModule/>
+          </ThemedView>
+          <ThemedView style={styles.card}>
+            <ViewUserRatingsModule/>
           </ThemedView>
         </ThemedView>
       </ScrollView>

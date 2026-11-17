@@ -96,3 +96,60 @@ export async function putRating(
     throw error;
   }
 }
+
+export async function getRatingByDuck(duckId: number) {
+  const response = await fetch(`${API_URL}/api/v1/ratings/ducks/${duckId}`);
+  const text = await response.text();
+
+  console.log('GET status:', response.status);
+  console.log('GET response:', text);
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  const data = text ? JSON.parse(text) : [];
+
+  // Spring returns a Page object, so the actual list is usually in content.
+  return Array.isArray(data)
+      ? data
+      : data.content ?? [];
+}
+
+export async function getRatingByUser(userId: number) {
+  const response = await fetch(`${API_URL}/api/v1/ratings/ducks/${userId}`);
+  const text = await response.text();
+
+  console.log('GET status:', response.status);
+  console.log('GET response:', text);
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  const data = text ? JSON.parse(text) : [];
+
+  // Spring returns a Page object, so the actual list is usually in content.
+  return Array.isArray(data)
+      ? data
+      : data.content ?? [];
+}
+
+export async function getRating(duckId: number, userId: number) {
+  const response = await fetch(`${API_URL}/api/v1/ratings/ducks/${duckId}/users/${userId}`);
+  const text = await response.text();
+
+  console.log('GET status:', response.status);
+  console.log('GET response:', text);
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  const data = text ? JSON.parse(text) : [];
+
+  // Spring returns a Page object, so the actual list is usually in content.
+  return Array.isArray(data)
+      ? data
+      : data.content ?? [];
+}

@@ -1,11 +1,10 @@
 import {ActivityIndicator, Button, FlatList, StyleSheet, View} from "react-native";
-import {postRating, getRatings, RatingResponse} from "@/services/ratings-api";
+import {postRating, RatingResponse} from "@/services/ratings-api";
 import {useState} from "react";
 import {ThemedView} from "@/components/themed-view";
 import {ThemedText} from "@/components/themed-text";
 import {BottomTabInset, MaxContentWidth, Spacing} from "@/constants/theme";
 import {TextInput, useNativeState} from "@expo/ui";
-import {RadioButton} from "@expo/ui/jetpack-compose";
 import {RadioGroup} from "@/components/CustomRadioSelect";
 
 export default function CreateRatingsModule() {
