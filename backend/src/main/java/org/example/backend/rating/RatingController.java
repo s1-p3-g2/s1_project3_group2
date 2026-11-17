@@ -74,7 +74,7 @@ public class RatingController {
   }
 
   @GetMapping("/rank/{duckId}")
-  public DuckRankingResponse getRating(@PathVariable int duckId) {
+  public DuckRankingResponse getRanking(@PathVariable int duckId) {
     return ratingService.getDuckRanking(duckId);
   }
 
