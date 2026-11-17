@@ -8,6 +8,7 @@ import UpdateRatingsModule from "@/components/ratings/UpdateRatings";
 import ViewRatingModule from "@/components/ratings/ViewSpecificRating";
 import ViewDuckRatingsModule from "@/components/ratings/ViewDuckRatings";
 import ViewUserRatingsModule from "@/components/ratings/ViewUserRatings";
+import ViewDuckRankingModule from "@/components/ratings/ViewDuckRanking";
 
 export default function RatingsScreen() {
   return (
@@ -39,6 +40,9 @@ export default function RatingsScreen() {
           </ThemedView>
           <ThemedView style={styles.card}>
             <ViewUserRatingsModule/>
+          </ThemedView>
+          <ThemedView style={styles.card}>
+            <ViewDuckRankingModule/>
           </ThemedView>
         </ThemedView>
       </ScrollView>

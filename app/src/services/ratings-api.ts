@@ -6,6 +6,12 @@ export type RatingResponse = {
   isPositive: boolean;
 };
 
+export type RankingResponse = {
+  duckId: number;
+  score: number;
+  position: number;
+};
+
 export async function getRatings(): Promise<RatingResponse[]> {
   const response = await fetch(`${API_URL}/api/v1/ratings`);
   const text = await response.text();
@@ -148,8 +154,21 @@ export async function getRating(duckId: number, userId: number) {
 
   const data = text ? JSON.parse(text) : [];
 
-  // Spring returns a Page object, so the actual list is usually in content.
   return Array.isArray(data)
       ? data
       : data.content ?? [];
+}
+
+export async function getDuckRanking(duckId: number) {
+  const response = await fetch(`${API_URL}/api/v1/ratings/rank/${duckId}`);
+  const text = await response.text();
+
+  console.log('GET status:', response.status);
+  console.log('GET response:', text);
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  return JSON.parse(text)
 }
