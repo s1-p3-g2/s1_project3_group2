@@ -23,7 +23,7 @@ public class User {
     private String authSub;
     @Column(length = 250)
     private String bio;
-    @Column(name = "profile_pic", columnDefinition = "TEXT")
+    @Column(name = "profile_picture_link", columnDefinition = "TEXT")
     private String profilePic;
     @Column(name = "is_admin", nullable = false)
     private boolean isAdmin;
