@@ -17,87 +17,83 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private long user_id;
+    @Column(nullable = false, length = 100)
+    private String username;
+    @Column(nullable = false, length = 10)
+    private String provider;
+    @Column(name = "provider_user_id", nullable = false, length = 255)//oh my fucking god. there was a semicolon here and nobody yelled at me for it
+    private String authSub;
+    @Column(length = 250)
+    private String bio;
+    @Column(name = "profile_picture_link", columnDefinition = "TEXT")
+    private String profilePic;
+    @Column(name = "is_admin", nullable = false)
+    private boolean isAdmin;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
-  private long user_id;
-  @Column(nullable = false, length = 100)
-  private String username;
-  @Column(nullable = false, length = 10)
-  private String provider;
-  @Column(name = "provider_user_id", nullable = false, length = 255)
-//oh my fucking god. there was a semicolon here and nobody yelled at me for it
-  private String authSub;
-  @Column(length = 250)
-  private String bio;
-  @Column(name = "profile_pic", columnDefinition = "TEXT")
-  private String profilePic;
-  @Column(name = "is_admin", nullable = false)
-  private boolean isAdmin;
+    protected User(String username, String provider, String authSub, String bio, String profilePic) {
+        this.username = username;
+        this.provider = provider;
+        this.authSub = authSub;
+        this.bio = bio;
+        this.profilePic = profilePic;
+        this.isAdmin = false;
+    }
+    protected User() {
+    }
 
-  protected User(String username, String provider, String authSub, String bio, String profilePic) {
-    this.username = username;
-    this.provider = provider;
-    this.authSub = authSub;
-    this.bio = bio;
-    this.profilePic = profilePic;
-    this.isAdmin = false;
-  }
+    public long getUserId() {
+        return user_id;
+    }
 
-  protected User() {
-  }
+    public String getAuthSub() {
+        return authSub;
+    }
+    public String getBio() {
+        return bio;
+    }
 
-  public long getUserId() {
-    return user_id;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public String getAuthSub() {
-    return authSub;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public String getBio() {
-    return bio;
-  }
+    public String getProvider() {
+        return provider;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public void setAuthSub(String authSub) {
+        this.authSub = authSub;
+    }
 
-  public String getProvider() {
-    return provider;
-  }
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 
-  public void setProvider(String provider) {
-    this.provider = provider;
-  }
+    public String getProfilePic() {
+        return profilePic;
+    }
 
-  public void setAuthSub(String authSub) {
-    this.authSub = authSub;
-  }
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
 
-  public void setBio(String bio) {
-    this.bio = bio;
-  }
+    public boolean isAdmin() {
+        return isAdmin;
+    }
 
-  public String getProfilePic() {
-    return profilePic;
-  }
-
-  public void setProfilePic(String profilePic) {
-    this.profilePic = profilePic;
-  }
-
-  public boolean isAdmin() {
-    return isAdmin;
-  }
-
-  //package private just so that other files can't call it willy nilly
-  void setAdmin(boolean admin) {
-    isAdmin = admin;
-  }
+    //package private just so that other files can't call it willy nilly
+    void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 }
