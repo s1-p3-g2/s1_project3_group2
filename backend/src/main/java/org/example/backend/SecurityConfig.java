@@ -35,6 +35,7 @@ public class SecurityConfig {
         redirectHandler.setDefaultTargetUrl("/api/me");
 
         http
+                .csrf(csrf -> csrf.disable()) // TODO: temporary, bypasses oauth to test ratings
                 .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
