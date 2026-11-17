@@ -103,7 +103,7 @@ COMMIT;
 BEGIN;
 TRUNCATE TABLE comments RESTART IDENTITY CASCADE; -- deletes all comments + restarts auto-incremented pk
 INSERT INTO comments
-(user_id, duck_id, comment)
+(user_id, duck_id, comment_text)
 VALUES (2, 1, 'The sailor hat makes this duck legendary.'),
        (3, 1, 'Captain Quackers looks ready for adventure.'),
        (1, 2, 'Very elegant. Someone should give Sir Waddles a monocle.'),
