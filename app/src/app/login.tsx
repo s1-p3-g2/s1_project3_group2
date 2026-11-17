@@ -7,6 +7,9 @@
 
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { Colors } from '@/constants/theme';
+
+const colors = Colors.light;
 const BACKEND_URL = 'http://localhost:8080';
 
 async function loginWith(provider: 'github' | 'google') {
@@ -31,7 +34,7 @@ export default function LoginScreen() {
             </View>
 
             {/*AN: button is label, color and pressfeedback. title is label, onPress runs the code in the not-lambda
-                    Pressable on the other hand, handles clicks and taps nested text is the label. its more customisable than button like it has spacing shape and colors. accessibilityRole tells assistive tech this acts as a button.*/}
+          Pressable on the other hand, handles clicks and taps nested text is the label. its more customisable than button like it has spacing shape and colors. accessibilityRole tells assistive tech this acts as a button.*/}
 
             <View style={styles.buttons}>
                 <Pressable
@@ -66,7 +69,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#EAF6FF',
+        backgroundColor: colors.background,
         alignItems: 'center',
         paddingHorizontal: 24,
         paddingTop: 48,
@@ -84,13 +87,13 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#17324D',
+        color: colors.text,
         textAlign: 'center',
     },
     description: {
         fontSize: 16,
         lineHeight: 24,
-        color: '#465D73',
+        color: colors.textSecondary,
         textAlign: 'center',
         marginTop: 12,
         maxWidth: 320,
@@ -110,21 +113,21 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     githubButton: {
-        backgroundColor: '#24292F',
+        backgroundColor: colors.githubBackground,
     },
     googleButton: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.backgroundElement,
         borderWidth: 1,
-        borderColor: '#C7D8E6',
+        borderColor: colors.border,
     },
     githubText: {
-        color: '#FFFFFF',
+        color: colors.githubText,
         fontSize: 16,
         fontWeight: '600',
         textAlign: 'center',
     },
     googleText: {
-        color: '#17324D',
+        color: colors.text,
         fontSize: 16,
         fontWeight: '600',
         textAlign: 'center',
