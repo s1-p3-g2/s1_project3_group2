@@ -9,6 +9,7 @@ package org.example.backend;
 import java.util.List;
 
 import org.example.backend.users.UserService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -79,24 +80,24 @@ public class SecurityConfig {
                         })
                 );
 
-        return http.build();
-    }
+    return http.build();
+  }
 
-    // Need cors config for expo apparently
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
+  // Need cors config for expo apparently
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
 
-        // Just allow everything, maybe do better config later
-        config.setAllowedOriginPatterns(List.of("*"));
-        config.setAllowedMethods(List.of("*"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(false);
+    // Just allow everything, maybe do better config later
+    config.setAllowedOriginPatterns(List.of("*"));
+    config.setAllowedMethods(List.of("*"));
+    config.setAllowedHeaders(List.of("*"));
+    config.setAllowCredentials(false);
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
+    UrlBasedCorsConfigurationSource source =
+        new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
+    source.registerCorsConfiguration("/**", config);
+    return source;
+  }
 }

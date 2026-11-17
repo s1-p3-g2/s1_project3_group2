@@ -1,1 +1,9 @@
-Nothing atm
+services:
+  api:
+    build: .
+    container_name: rate_duck
+    ports:
+      - "8080:8080"
+    environment:
+      SUPABASE_DB_URL: ${DATABASE_URL}
+      SERVER_PORT: 8080
