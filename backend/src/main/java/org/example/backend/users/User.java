@@ -1,13 +1,19 @@
 package org.example.backend.users;
 
 import jakarta.persistence.*;
+
 /**
  * @author Victoria Ha
- * @version 0.1.0
- * Description: This is the Model class
+ * @version 0.1.0 Description: This is the Model class
  * @since 11/9/2026
  */
 
+  /*
+  PMD WARNING: AvoidFieldNameMatchingMethodName ️
+    https://docs.pmd-code.org/pmd-doc-7.24.0/pmd_rules_java_errorprone.html#avoidfieldnamematchingmethodname
+    Doesn't like User.isAdmin(), idc
+  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 @Entity
 @Table(name = "users")
 public class User {

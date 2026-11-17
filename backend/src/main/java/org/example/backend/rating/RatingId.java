@@ -5,11 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 /**
- * @author Paul Conner
- * @since
- *
- **/
-
+ * Represents the compound-primary key tied to each row of the database.
+ */
 @Embeddable
 public class RatingId {
   @Column(name = "user_id")
@@ -17,16 +14,22 @@ public class RatingId {
   @Column(name = "duck_id")
   private int duckId;
 
+  /**
+   * Basic RatingId constructor.
+   *
+   * @param userId Represents database id for a single user
+   * @param duckId Represents the database id for a single duck
+   *
+   */
   public RatingId(int userId, int duckId) {
     this.userId = userId;
     this.duckId = duckId;
   }
 
-  public RatingId() {
-
-  }
-
-
+  /**
+   * Parameter-less constructor, here to suppress warnings.
+   */
+  public RatingId() {}
 
   public int getUserId() {
     return userId;
@@ -47,8 +50,12 @@ public class RatingId {
   // Required for repository equality checks
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     RatingId other = (RatingId) o;
     return userId == other.userId && duckId == other.duckId;
   }
