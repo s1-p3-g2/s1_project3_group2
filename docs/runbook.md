@@ -42,6 +42,63 @@ When running the app in a web browser, open:
 http://localhost:8081/ratings
 ```
 
+## Navigate to the Login page
+Prerequisites: Node.js and npm installed.
+Open a terminal at the repository root.
+Navigate to the frontend folder:
+
+
+  ```sh
+  cd app
+  ```
+
+
+Install dependencies:
+
+
+  ```sh
+  npm ci
+  ```
+
+
+Start the web frontend:
+
+
+  ```sh
+  npm run web
+  ```
+
+
+Open `http://localhost:8081/Login` in your browser.
+Check the terminal for the actual port. The current integration expects port `8081`.
+Keep the terminal running while using the frontend. Press `Ctrl+C` to stop it.
+On Windows PowerShell, use `npm.cmd` instead of `npm` if script execution is blocked.
+
+
+## Test sign-in
+
+
+Start the Spring Boot backend on `http://localhost:8080`.
+Ensure the backend run configuration loads the private environment file containing:
+
+
+  ```dotenv
+  DATABASE_URL=<PostgreSQL JDBC connection string>
+  GITHUB_CLIENT_ID=<GitHub OAuth client ID>
+  GITHUB_CLIENT_SECRET=<GitHub OAuth client secret>
+  GOOGLE_CLIENT_ID=<Google OAuth client ID>
+  GOOGLE_CLIENT_SECRET=<Google OAuth client secret>
+  ```
+
+
+Obtain development credentials privately from the project team. Do not commit the environment file.
+In IntelliJ, select the backend run configuration that loads this file, then run `BackendApplication`.
+Wait for the console to report `Started BackendApplication`.
+Open `http://localhost:8081/Login` and select Google or GitHub.
+After successful sign-in, the browser should redirect to `http://localhost:8081/leaderboard`.
+The leaderboard is currently a blank placeholder.
+Use ports `8080` and `8081`: the OAuth links and frontend redirect currently use those addresses.
+
 When running in Expo Go or an emulator, open the `/ratings` route through the
 Expo Router development URL. The page contains modules for viewing ratings,
 creating a rating, updating a rating, viewing ratings by duck or user, and
