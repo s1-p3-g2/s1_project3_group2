@@ -32,3 +32,7 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test
+
+      # TODO, replace run tests when everyone's static analysis is clean
+#      - name: Run Overall Check
+#        run: ./gradlew check

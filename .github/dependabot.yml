@@ -1,0 +1,17 @@
+#added by Victoria H. 11/16/2026 12:18p
+# basically it tells github to run version update checks for all gradle
+# dependencies and makes a pr for new versions and patches. only 3 can
+# exist at a time.
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+#this bit..checks versions of reusable actions referenced by other workflows.. this adds another 3 limit so it's 3 total.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3

@@ -289,7 +289,118 @@ class UserServiceTest {
         verify(targetUser).setAdmin(false);
         verify(repository).save(targetUser);
     }
+    // ---------- Creating users after OAuth login ----------
 
+    /*
+     * A first-time login creates and saves a user with the supplied
+     * provider identity and profile picture, an empty bio, and no admin access.
+     */
+    @Test
+    void findOrCreateUserSavesNewNonAdminUser() {
+        when(repository.findByProviderAndAuthSub("google", "456"))
+                .thenReturn(Optional.empty());
+
+        // Simulate save returning the entity that was passed to it.
+        when(repository.save(any(User.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        User result = service.findOrCreateUser(
+                "google",
+                "456",
+                "Duck Friend",
+                "https://example.com/google-picture.png"
+        );
+
+        assertEquals("google", result.getProvider());
+        assertEquals("456", result.getAuthSub());
+        assertEquals("Duck Friend", result.getUsername());
+        assertEquals(
+                "https://example.com/google-picture.png",
+                result.getProfilePic()
+        );
+        assertNull(result.getBio());
+        assertFalse(result.isAdmin());
+
+        verify(repository).save(result);
+    }
+
+    /*
+     * A returning user keeps their existing profile and administrator status,
+     * even when the provider supplies different profile details.
+     * No replacement user is saved.
+     */
+    @Test
+    void findOrCreateUserPreservesExistingUser() {
+        User existingUser = new User(
+                "My chosen username",
+                "github",
+                "123",
+                "My custom bio",
+                "https://example.com/custom-picture.png"
+        );
+        existingUser.setAdmin(true);
+
+        when(repository.findByProviderAndAuthSub("github", "123"))
+                .thenReturn(Optional.of(existingUser));
+
+        User result = service.findOrCreateUser(
+                "github",
+                "123",
+                "Different provider username",
+                "https://example.com/new-provider-picture.png"
+        );
+
+        assertSame(existingUser, result);
+        assertEquals("My chosen username", result.getUsername());
+        assertEquals("My custom bio", result.getBio());
+        assertEquals(
+                "https://example.com/custom-picture.png",
+                result.getProfilePic()
+        );
+        assertTrue(result.isAdmin());
+
+        verify(repository, never()).save(any(User.class));
+    }
+
+    /*
+     * A GitHub user does not prevent creation of a Google user with the
+     * same provider-specific ID. Each provider has its own identity space.
+     */
+    @Test
+    void findOrCreateUserSeparatesProvidersWithTheSameId() {
+        User githubUser = new User(
+                "GitHub Duck",
+                "github",
+                "123",
+                null,
+                null
+        );
+
+        when(repository.findByProviderAndAuthSub("github", "123"))
+                .thenReturn(Optional.of(githubUser));
+        when(repository.findByProviderAndAuthSub("google", "123"))
+                .thenReturn(Optional.empty());
+        when(repository.save(any(User.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        User githubResult = service.findOrCreateUser(
+                "github", "123", "GitHub Duck", null
+        );
+        User googleResult = service.findOrCreateUser(
+                "google", "123", "Google Duck", null
+        );
+
+        assertSame(githubUser, githubResult);
+        assertNotSame(githubResult, googleResult);
+        assertEquals("google", googleResult.getProvider());
+        assertEquals("123", googleResult.getAuthSub());
+        assertEquals("Google Duck", googleResult.getUsername());
+        assertFalse(googleResult.isAdmin());
+
+        // Only the new Google user should be saved.
+        verify(repository, times(1)).save(any(User.class));
+        verify(repository).save(googleResult);
+    }
     // ---------- Shared test setup ----------
 
     /*

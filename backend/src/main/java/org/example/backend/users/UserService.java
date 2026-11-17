@@ -36,6 +36,32 @@ public class UserService {
                         "User not found"
                 ));
     }
+    /**
+     * Returns the existing app user, or creates one on their first login.
+     * Identity and profile values must come from the authenticated OAuth session.
+     * Existing profiles and administrator permissions are preserved.
+     */
+    @Transactional
+    public User findOrCreateUser(
+            String provider,
+            String providerUserId,
+            String username,
+            String profilePic
+    ) {
+        return userRepository
+                .findByProviderAndAuthSub(provider, providerUserId)
+                .orElseGet(() -> {
+                    User newUser = new User(
+                            username,
+                            provider,
+                            providerUserId,
+                            null,
+                            profilePic
+                    );
+
+                    return userRepository.save(newUser);
+                });
+    }
 
     //admin check
     public boolean isAdmin(String provider, String providerUserId) {
