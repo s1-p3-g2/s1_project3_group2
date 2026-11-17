@@ -37,7 +37,11 @@ public class SecurityConfig {
         http
                 .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
                         .requestMatchers(HttpMethod.GET, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
+                        .requestMatchers(HttpMethod.POST, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/ratings/**").permitAll() // TODO: temporary, bypasses oauth to test ratings
                         .requestMatchers("/api/me").authenticated()
                         .anyRequest().authenticated()
                 )
