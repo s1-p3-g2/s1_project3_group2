@@ -6,6 +6,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,22 @@ public class DuckController {
             return ResponseEntity.status(HttpStatus.CREATED).body(createdDuck);
             
     }
+
+    @GetMapping("api/v1/ducks/{duckId}")
+    public void getDuck(@PathVariable int duckId){
+        //Get a duck via a specific duckID
+    }
+
+    @GetMapping("api/v1/ducks/all")
+    public void getAllDucks(){
+        //Get a duck via a specific duckID
+    }
+
+    @GetMapping("api/v1/ducks/allRanked")
+    public void getAllDucksRanked(){
+        //Get a duck via a specific duckID
+    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleBadRequest(IllegalArgumentException exception) {
