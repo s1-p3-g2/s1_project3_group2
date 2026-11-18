@@ -2,14 +2,27 @@ package org.example.backend.duck;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 public class DuckService {
     private  JdbcTemplate jdbcTemplate;
+    private final DuckRepository duckRepository;
+
+    /**
+   * Duck service constructor, auto called by Spring Boot on initialization.
+   *
+   * @param duckRepository The database access object that the service uses to interface with the
+   *                         database ducks table
+   */
+    public DuckService(DuckRepository duckRepository) {
+        this.duckRepository = duckRepository;
+    }
+
     @Transactional 
     public PostDuckResponse createDuck(PostDuckRequest pdr){
         //Do the jbdc template stuff here then return a PostDuckResponse object or an error
@@ -54,5 +67,15 @@ public class DuckService {
             ),
             generatedId.intValue()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public Duck getDuck(Integer duckId){
+        return duckRepository.getReferenceById(duckId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Duck> getAllDuckRanked(){
+        return duckRepository.findAllOrderByRatingScoreDesc();
     }
 }

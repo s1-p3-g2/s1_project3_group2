@@ -1,6 +1,9 @@
 package org.example.backend.duck;
 
+import java.util.List;
 import java.util.Map;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -25,18 +28,13 @@ public class DuckController {
     }
 
     @GetMapping("api/v1/ducks/{duckId}")
-    public void getDuck(@PathVariable int duckId){
-        //Get a duck via a specific duckID
-    }
-
-    @GetMapping("api/v1/ducks/all")
-    public void getAllDucks(){
-        //Get a duck via a specific duckID
+    public Duck getDuck(@PathVariable int duckId){
+        return duckService.getDuck(duckId);
     }
 
     @GetMapping("api/v1/ducks/allRanked")
-    public void getAllDucksRanked(){
-        //Get a duck via a specific duckID
+    public List<Duck> getAllDucksRanked(Pageable pageable){
+        return duckService.getAllDuckRanked();
     }
 
 
