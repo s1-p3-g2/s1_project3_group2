@@ -2,14 +2,34 @@ package org.example.backend.duck;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
-
+@Service
 public class DuckService {
     private  JdbcTemplate jdbcTemplate;
+    private final DuckRepository duckRepository;
+
+    /**
+   * Duck service constructor, auto called by Spring Boot on initialization.
+   *
+   * @param duckRepository The database access object that the service uses to interface with the
+   *                         database ducks table
+   * * @param jbdcTemplate you need this in order to do database stuff
+   */
+    public DuckService(
+        DuckRepository duckRepository,
+        JdbcTemplate jdbcTemplate) {
+        this.duckRepository = duckRepository;
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     @Transactional 
     public PostDuckResponse createDuck(PostDuckRequest pdr){
         //Do the jbdc template stuff here then return a PostDuckResponse object or an error
@@ -54,5 +74,19 @@ public class DuckService {
             ),
             generatedId.intValue()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public Duck getDuck(Integer duckId) {
+        return duckRepository.findById(duckId)
+            .orElseThrow(() ->
+                new EmptyResultDataAccessException(
+                    "Duck with id " + duckId + " does not exist", 1)
+            );
+    }
+
+    @Transactional(readOnly = true)
+    public List<Duck> getAllDuckRanked(){
+        return duckRepository.findAllByOrderByRatingScoreDesc();
     }
 }

@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.List;
+import static org.mockito.Mockito.verify;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,11 +21,37 @@ class DuckControllerTest {
     @BeforeEach
     void setUp() throws Exception {
         duckService = mock(DuckService.class);
-        controller = new DuckController();
+        controller = new DuckController(duckService);
 
         var field = DuckController.class.getDeclaredField("duckService");
         field.setAccessible(true);
         field.set(controller, duckService);
+    }
+
+     @Test
+    void getDuck_returnsDuckFromService() {
+        Duck expected = new Duck("Mallard", "duck.png", "A mallard", 7, 42);
+        expected.setDuckId(12);
+        when(duckService.getDuck(12)).thenReturn(expected);
+
+        Duck actual = controller.getDuck(12);
+
+        assertEquals(expected, actual);
+        verify(duckService).getDuck(12);
+    }
+
+    @Test
+    void getAllDucksRanked_returnsRankedDucksFromService() {
+        List<Duck> expected = List.of(
+            new Duck("Mallard", "mallard.png", "A mallard", 7, 42),
+            new Duck("Pekin", "pekin.png", "A Pekin duck", 8, 35)
+        );
+        when(duckService.getAllDuckRanked()).thenReturn(expected);
+
+       List<Duck> actual = controller.getAllDucksRanked();
+
+        assertEquals(expected, actual);
+        verify(duckService).getAllDuckRanked();
     }
 
     @Test
