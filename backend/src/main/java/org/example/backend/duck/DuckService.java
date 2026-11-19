@@ -18,9 +18,13 @@ public class DuckService {
    *
    * @param duckRepository The database access object that the service uses to interface with the
    *                         database ducks table
+   * * @param jbdcTemplate you need this in order to do database stuff
    */
-    public DuckService(DuckRepository duckRepository) {
+    public DuckService(
+        DuckRepository duckRepository,
+        JdbcTemplate jdbcTemplate) {
         this.duckRepository = duckRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Transactional 
@@ -70,12 +74,16 @@ public class DuckService {
     }
 
     @Transactional(readOnly = true)
-    public Duck getDuck(Integer duckId){
-        return duckRepository.getReferenceById(duckId);
+    public Duck getDuck(Integer duckId) {
+        return duckRepository.findById(duckId)
+            .orElseThrow(() ->
+                new EmptyResultDataAccessException(
+                    "Duck with id " + duckId + " does not exist", 1)
+            );
     }
 
     @Transactional(readOnly = true)
     public List<Duck> getAllDuckRanked(){
-        return duckRepository.findAllOrderByRatingScoreDesc();
+        return duckRepository.findAllByOrderByRatingScoreDesc();
     }
 }

@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DuckController {
-    private DuckService duckService;
+    private final DuckService duckService;
+
+    public DuckController(DuckService duckService) {
+        this.duckService = duckService;
+    }
 
     @PostMapping("api/v1/ducks")
         public ResponseEntity<PostDuckResponse> createDuck(@RequestBody PostDuckRequest pdr){
@@ -33,7 +37,7 @@ public class DuckController {
     }
 
     @GetMapping("api/v1/ducks/allRanked")
-    public List<Duck> getAllDucksRanked(Pageable pageable){
+    public ResponseEntity<List<Duck>> getAllDucksRanked(Pageable pageable){
         return duckService.getAllDuckRanked();
     }
 

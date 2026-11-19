@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
 public interface DuckRepository extends JpaRepository<Duck, Integer> {
 
     //All ducks in order
-    List<Duck> findAllOrderByRatingScoreDesc();
+    List<Duck> findAllByOrderByRatingScoreDesc();
 }
