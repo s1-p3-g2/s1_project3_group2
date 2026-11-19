@@ -163,6 +163,7 @@ class UserServiceTest {
         when(listedUser.getProfilePic())
                 .thenReturn("https://example.com/duck.png");
         when(listedUser.isAdmin()).thenReturn(false);
+        when(listedUser.getEmail()).thenReturn("duck@example.com");
 
         when(repository.findAll()).thenReturn(List.of(listedUser));
 
@@ -175,7 +176,8 @@ class UserServiceTest {
                         "Duck owner",
                         "I like ducks",
                         "https://example.com/duck.png",
-                        false
+                        false,
+                        "duck@example.com"
                 )),
                 result
         );

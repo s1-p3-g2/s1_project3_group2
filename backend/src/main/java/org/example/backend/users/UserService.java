@@ -40,6 +40,7 @@ public class UserService {
      * Returns the existing app user, or creates one on their first login.
      * Identity and profile values must come from the authenticated OAuth session.
      * Existing profiles and administrator permissions are preserved.
+     * Rejects emails already associated with a different OAuth provider.
      */
     @Transactional
     public User findOrCreateUser(
@@ -49,6 +50,24 @@ public class UserService {
             String profilePic,
             String email
     ) {
+        if (email == null || email.isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "An email address is required to sign in"
+            );
+        }
+
+        String trimmedEmail = email.strip();
+
+        if (userRepository.existsByEmailIgnoreCaseAndProviderNot(
+                trimmedEmail, provider
+        )) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "This email is already registered with a different sign-in provider"
+            );
+        }
+
         return userRepository
                 .findByProviderAndAuthSub(provider, providerUserId)
                 .orElseGet(() -> {
@@ -58,7 +77,7 @@ public class UserService {
                             providerUserId,
                             null,
                             profilePic,
-                            email
+                            trimmedEmail
                     );
 
                     return userRepository.save(newUser);
