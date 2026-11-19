@@ -14,9 +14,11 @@ import static org.mockito.Mockito.when;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Map;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,15 +27,52 @@ import org.springframework.jdbc.support.KeyHolder;
 class DuckServiceTest {
     private JdbcTemplate jdbcTemplate;
     private DuckService service;
+    private DuckRepository duckRepository;
 
     @BeforeEach
     void setUp() throws Exception {
         jdbcTemplate = mock(JdbcTemplate.class);
-        service = new DuckService();
+        duckRepository = mock(DuckRepository.class);
+        service = new DuckService(duckRepository, jdbcTemplate);
+    }
 
-        var field = DuckService.class.getDeclaredField("jdbcTemplate");
-        field.setAccessible(true);
-        field.set(service, jdbcTemplate);
+    @Test
+    void getDuck_returnsDuckFromRepository() {
+        Duck expected = new Duck("Mallard", "duck.png", "A mallard", 7, 42);
+        expected.setDuckId(12);
+        when(duckRepository.findById(12)).thenReturn(java.util.Optional.of(expected));
+
+        Duck actual = service.getDuck(12);
+
+        assertEquals(expected, actual);
+        verify(duckRepository).findById(12);
+    }
+
+    @Test
+    void getDuck_throwsNotFoundWhenRepositoryHasNoDuck() {
+        when(duckRepository.findById(12)).thenReturn(java.util.Optional.empty());
+
+        EmptyResultDataAccessException error = assertThrows(
+            EmptyResultDataAccessException.class,
+            () -> service.getDuck(12)
+        );
+
+        assertEquals("Duck with id 12 does not exist", error.getMessage());
+        verify(duckRepository).findById(12);
+    }
+
+    @Test
+    void getAllDuckRanked_returnsDucksInRepositoryOrder() {
+        List<Duck> expected = List.of(
+            new Duck("Mallard", "mallard.png", "A mallard", 7, 42),
+            new Duck("Pekin", "pekin.png", "A Pekin duck", 8, 35)
+        );
+        when(duckRepository.findAllByOrderByRatingScoreDesc()).thenReturn(expected);
+
+        List<Duck> actual = service.getAllDuckRanked();
+
+        assertEquals(expected, actual);
+        verify(duckRepository).findAllByOrderByRatingScoreDesc();
     }
 
     @Test

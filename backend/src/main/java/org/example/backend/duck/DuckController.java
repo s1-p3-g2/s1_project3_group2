@@ -37,7 +37,7 @@ public class DuckController {
     }
 
     @GetMapping("api/v1/ducks/allRanked")
-    public ResponseEntity<List<Duck>> getAllDucksRanked(Pageable pageable){
+    public List<Duck> getAllDucksRanked(){
         return duckService.getAllDuckRanked();
     }
 
