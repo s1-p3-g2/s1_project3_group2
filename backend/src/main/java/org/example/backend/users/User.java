@@ -33,14 +33,17 @@ public class User {
     private String profilePic;
     @Column(name = "is_admin", nullable = false)
     private boolean isAdmin;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-    protected User(String username, String provider, String authSub, String bio, String profilePic) {
+    protected User(String username, String provider, String authSub, String bio, String profilePic, String e) {
         this.username = username;
         this.provider = provider;
         this.authSub = authSub;
         this.bio = bio;
         this.profilePic = profilePic;
         this.isAdmin = false;
+        this.email = e;
     }
     protected User() {
     }
@@ -95,5 +98,13 @@ public class User {
     //package private just so that other files can't call it willy nilly
     void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(boolean email) {
+        this.email = email;
     }
 }

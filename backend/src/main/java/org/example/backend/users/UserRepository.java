@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Victoria Ha
  * @version 0.1.0
  * Description: this may need fixing down th line but
- * @since 11/9/2026
+ * @since 11/19/2026
  */
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -15,5 +15,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByProviderAndAuthSub(
             String provider,
             String authSub
+    );
+
+    boolean existsByEmailIgnoreCaseAndProviderNot(
+            String email,
+            String provider
     );
 }

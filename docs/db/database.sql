@@ -15,15 +15,16 @@ BEGIN;
 
 CREATE TABLE users
 (
-    user_id          BIGSERIAL Primary Key,
-    username         VARCHAR(255),
-    bio              TEXT,
-    profile_picture_link      TEXT,
-    provider         VARCHAR(10)  NOT NULL
+    user_id              BIGSERIAL Primary Key,
+    username             VARCHAR(255),
+    bio                  TEXT,
+    profile_picture_link TEXT,
+    provider             VARCHAR(10)         NOT NULL
         CONSTRAINT valid_provider_check CHECK (provider IN ('github', 'google')),
-    provider_user_id varchar(255) NOT NULL,
-    is_admin         BOOLEAN      NOT NULL DEFAULT FALSE,
-    CONSTRAINT unique_provider_user_id UNIQUE (provider, provider_user_id)
+    provider_user_id     varchar(255)        NOT NULL,
+        CONSTRAINT unique_provider_user_id UNIQUE (provider, provider_user_id),
+    is_admin             BOOLEAN             NOT NULL DEFAULT FALSE,
+    email                varchar(128) UNIQUE,
 );
 
 CREATE TABLE ducks
@@ -35,7 +36,8 @@ CREATE TABLE ducks
     creator_id   INT          REFERENCES users (user_id) ON DELETE SET NULL,
     rating_score INT
 );
-COMMENT ON COLUMN ducks.rating_score is 'Updated with every rating';
+COMMENT
+ON COLUMN ducks.rating_score is 'Updated with every rating';
 
 
 CREATE TABLE ratings

@@ -46,7 +46,8 @@ public class UserService {
             String provider,
             String providerUserId,
             String username,
-            String profilePic
+            String profilePic,
+            String email
     ) {
         return userRepository
                 .findByProviderAndAuthSub(provider, providerUserId)
@@ -56,7 +57,8 @@ public class UserService {
                             provider,
                             providerUserId,
                             null,
-                            profilePic
+                            profilePic,
+                            email
                     );
 
                     return userRepository.save(newUser);
@@ -71,6 +73,7 @@ public class UserService {
                 .orElse(false);
     }
     //RequireAd- yeah honestly.
+
     private void requireAdmin(Authentication authentication) {
         User currentUser = requireUser(authentication);
 
@@ -112,12 +115,15 @@ public class UserService {
                         user.getUsername(),
                         user.getBio(),
                         user.getProfilePic(),
-                        user.isAdmin()
+                        user.isAdmin(),
+                        user.getEmail()
                 ))
                 .toList();
     }
 
-    private User requireUser(Authentication authentication) {
+    //unpacks user from the autho session. paul might use this later idrk..
+    @Transactional(readOnly = true)
+    public User requireUser(Authentication authentication) {
         if (!(authentication instanceof OAuth2AuthenticationToken oauth)
                 || !oauth.isAuthenticated()) {
             throw new ResponseStatusException(
@@ -142,7 +148,8 @@ public class UserService {
             String username,
             String bio,
             String profilePic,
-            boolean isAdmin
+            boolean isAdmin,
+            String email
     ) {}
 
 }

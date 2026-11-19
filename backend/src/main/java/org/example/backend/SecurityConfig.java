@@ -95,7 +95,8 @@ public class SecurityConfig {
                                     provider,
                                     providerUserId,
                                     username,
-                                    profilePic
+                                    profilePic,
+                                    email
                             );
 
                             redirectHandler.onAuthenticationSuccess(

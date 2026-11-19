@@ -300,6 +300,10 @@ class UserServiceTest {
         when(repository.findByProviderAndAuthSub("google", "456"))
                 .thenReturn(Optional.empty());
 
+        when(repository.existsByEmailIgnoreCaseAndProviderNot(
+                "duck@example.com", "google"
+        )).thenReturn(false);
+
         // Simulate save returning the entity that was passed to it.
         when(repository.save(any(User.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -308,7 +312,8 @@ class UserServiceTest {
                 "google",
                 "456",
                 "Duck Friend",
-                "https://example.com/google-picture.png"
+                "https://example.com/google-picture.png",
+                "duck@example.com"
         );
 
         assertEquals("google", result.getProvider());
@@ -318,9 +323,13 @@ class UserServiceTest {
                 "https://example.com/google-picture.png",
                 result.getProfilePic()
         );
+        assertEquals("duck@example.com", result.getEmail());
         assertNull(result.getBio());
         assertFalse(result.isAdmin());
 
+        verify(repository).existsByEmailIgnoreCaseAndProviderNot(
+                "duck@example.com", "google"
+        );
         verify(repository).save(result);
     }
 
@@ -336,9 +345,14 @@ class UserServiceTest {
                 "github",
                 "123",
                 "My custom bio",
-                "https://example.com/custom-picture.png"
+                "https://example.com/custom-picture.png",
+                "duck@example.com"
         );
         existingUser.setAdmin(true);
+
+        when(repository.existsByEmailIgnoreCaseAndProviderNot(
+                "duck@example.com", "github"
+        )).thenReturn(false);
 
         when(repository.findByProviderAndAuthSub("github", "123"))
                 .thenReturn(Optional.of(existingUser));
@@ -347,7 +361,8 @@ class UserServiceTest {
                 "github",
                 "123",
                 "Different provider username",
-                "https://example.com/new-provider-picture.png"
+                "https://example.com/new-provider-picture.png",
+                "duck@example.com"
         );
 
         assertSame(existingUser, result);
@@ -357,14 +372,19 @@ class UserServiceTest {
                 "https://example.com/custom-picture.png",
                 result.getProfilePic()
         );
+        assertEquals("duck@example.com", result.getEmail());
         assertTrue(result.isAdmin());
 
+        verify(repository).existsByEmailIgnoreCaseAndProviderNot(
+                "duck@example.com", "github"
+        );
         verify(repository, never()).save(any(User.class));
     }
 
     /*
      * A GitHub user does not prevent creation of a Google user with the
      * same provider-specific ID. Each provider has its own identity space.
+     * These accounts use different email addresses.
      */
     @Test
     void findOrCreateUserSeparatesProvidersWithTheSameId() {
@@ -373,21 +393,32 @@ class UserServiceTest {
                 "github",
                 "123",
                 null,
-                null
+                null,
+                "github-duck@example.com"
         );
 
         when(repository.findByProviderAndAuthSub("github", "123"))
                 .thenReturn(Optional.of(githubUser));
         when(repository.findByProviderAndAuthSub("google", "123"))
                 .thenReturn(Optional.empty());
+
+        when(repository.existsByEmailIgnoreCaseAndProviderNot(
+                "github-duck@example.com", "github"
+        )).thenReturn(false);
+        when(repository.existsByEmailIgnoreCaseAndProviderNot(
+                "google-duck@example.com", "google"
+        )).thenReturn(false);
+
         when(repository.save(any(User.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         User githubResult = service.findOrCreateUser(
-                "github", "123", "GitHub Duck", null
+                "github", "123", "GitHub Duck", null,
+                "github-duck@example.com"
         );
         User googleResult = service.findOrCreateUser(
-                "google", "123", "Google Duck", null
+                "google", "123", "Google Duck", null,
+                "google-duck@example.com"
         );
 
         assertSame(githubUser, githubResult);
@@ -395,11 +426,137 @@ class UserServiceTest {
         assertEquals("google", googleResult.getProvider());
         assertEquals("123", googleResult.getAuthSub());
         assertEquals("Google Duck", googleResult.getUsername());
+        assertEquals("google-duck@example.com", googleResult.getEmail());
         assertFalse(googleResult.isAdmin());
 
         // Only the new Google user should be saved.
         verify(repository, times(1)).save(any(User.class));
         verify(repository).save(googleResult);
+    }
+
+    /*
+     * An email registered with GitHub cannot create a Google account.
+     */
+    @Test
+    void findOrCreateUserRejectsGoogleWhenEmailBelongsToGithub() {
+        when(repository.existsByEmailIgnoreCaseAndProviderNot(
+                "duck@example.com", "google"
+        )).thenReturn(true);
+
+        ResponseStatusException error = assertThrows(
+                ResponseStatusException.class,
+                () -> service.findOrCreateUser(
+                        "google", "456", "Google Duck", null,
+                        "duck@example.com"
+                )
+        );
+
+        assertEquals(HttpStatus.CONFLICT, error.getStatusCode());
+        verify(repository, never()).save(any(User.class));
+    }
+
+    /*
+     * The restriction also applies when Google was the original provider.
+     */
+    @Test
+    void findOrCreateUserRejectsGithubWhenEmailBelongsToGoogle() {
+        when(repository.existsByEmailIgnoreCaseAndProviderNot(
+                "duck@example.com", "github"
+        )).thenReturn(true);
+
+        ResponseStatusException error = assertThrows(
+                ResponseStatusException.class,
+                () -> service.findOrCreateUser(
+                        "github", "123", "GitHub Duck", null,
+                        "duck@example.com"
+                )
+        );
+
+        assertEquals(HttpStatus.CONFLICT, error.getStatusCode());
+        verify(repository, never()).save(any(User.class));
+    }
+
+    /*
+     * An existing provider identity must not bypass the email conflict check.
+     */
+    @Test
+    void findOrCreateUserRejectsConflictEvenForExistingAccount() {
+        User existingUser = new User(
+                "Google Duck",
+                "google",
+                "456",
+                null,
+                null,
+                "duck@example.com"
+        );
+
+        when(repository.findByProviderAndAuthSub("google", "456"))
+                .thenReturn(Optional.of(existingUser));
+        when(repository.existsByEmailIgnoreCaseAndProviderNot(
+                "duck@example.com", "google"
+        )).thenReturn(true);
+
+        ResponseStatusException error = assertThrows(
+                ResponseStatusException.class,
+                () -> service.findOrCreateUser(
+                        "google", "456", "Google Duck", null,
+                        "duck@example.com"
+                )
+        );
+
+        assertEquals(HttpStatus.CONFLICT, error.getStatusCode());
+        verify(repository, never()).save(any(User.class));
+    }
+
+    /*
+     * Surrounding whitespace is removed before checking and saving the email.
+     */
+    @Test
+    void findOrCreateUserTrimsEmailBeforeCheckingAndSaving() {
+        when(repository.findByProviderAndAuthSub("google", "456"))
+                .thenReturn(Optional.empty());
+        when(repository.save(any(User.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        User result = service.findOrCreateUser(
+                "google", "456", "Duck Friend", null,
+                "  duck@example.com  "
+        );
+
+        assertEquals("duck@example.com", result.getEmail());
+        verify(repository).existsByEmailIgnoreCaseAndProviderNot(
+                "duck@example.com", "google"
+        );
+        verify(repository).save(result);
+    }
+
+    /*
+     * Without an email, the cross-provider restriction cannot be checked.
+     */
+    @Test
+    void findOrCreateUserRejectsMissingEmail() {
+        ResponseStatusException error = assertThrows(
+                ResponseStatusException.class,
+                () -> service.findOrCreateUser(
+                        "google", "456", "Duck Friend", null, null
+                )
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, error.getStatusCode());
+        verifyNoInteractions(repository);
+    }
+
+    @Test
+    void findOrCreateUserRejectsBlankEmail() {
+        ResponseStatusException error = assertThrows(
+                ResponseStatusException.class,
+                () -> service.findOrCreateUser(
+                        "google", "456", "Duck Friend", null, "   "
+                )
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, error.getStatusCode());
+        verifyNoInteractions(repository);
     }
     // ---------- Shared test setup ----------
 
