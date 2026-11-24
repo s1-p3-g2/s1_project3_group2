@@ -21,6 +21,9 @@ npm install
 npx expo start
 ```
 
+Note if you have problems with npm do not run npm audit fix --force
+it will cause the entire library to be unusable.
+
 The Expo development server displays options for opening the app:
 
 - Press `w` to open the app in a web browser.
