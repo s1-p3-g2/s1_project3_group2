@@ -4,7 +4,7 @@ import com.github.spotbugs.snom.Effort
 
 plugins {
     java
-    id("org.springframework.boot") version "4.1.2"
+    id("org.springframework.boot") version "4.2.0"
     id("io.spring.dependency-management") version "1.1.7"
     pmd                                               // Java Static Analysis
     id("com.github.spotbugs") version "6.5.13"        // Java Static Analysis
