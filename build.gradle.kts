@@ -58,7 +58,7 @@ dependencies {
 
     spotbugs("com.github.spotbugs:spotbugs:4.9.3")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
-    compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.3")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.5")
 }
 
 tasks.withType<Test> {
