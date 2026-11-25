@@ -3,7 +3,6 @@ package org.example.backend.duck;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
