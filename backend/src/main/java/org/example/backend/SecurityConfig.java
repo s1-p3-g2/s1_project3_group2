@@ -28,10 +28,14 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
+//temporary logging stuff?
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Configuration
 public class SecurityConfig {
-
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SecurityConfig.class);
     // Determines which routes to protect with oauth
     @Bean
     SecurityFilterChain securityFilterChain(
@@ -124,6 +128,7 @@ public class SecurityConfig {
                             } catch (RuntimeException exception) {
                                 // Provider login succeeded, but app sign-in was rejected.
                                 // Clear the authenticated session before returning an error.
+                                LOGGER.error("App sign-in failed for provider {}", provider, exception);
                                 new SecurityContextLogoutHandler().logout(
                                         request, response, authentication
                                 );

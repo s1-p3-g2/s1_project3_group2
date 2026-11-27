@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 
 /**
  * @author Victoria Ha
- * @version 0.1.0 Description: This is the Model class
- * @since 11/9/2026
+ * @version 0.1.0
+ * Description: This is the Model class
+ * @since 11/19/2026
  */
 
   /*
@@ -20,7 +21,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private long user_id;
+    private long userId;
     @Column(nullable = false, length = 100)
     private String username;
     @Column(nullable = false, length = 10)
@@ -49,7 +50,7 @@ public class User {
     }
 
     public long getUserId() {
-        return user_id;
+        return userId;
     }
 
     public String getAuthSub() {
